@@ -416,4 +416,29 @@ function setup {
     nvim_setup
 }
 
-setup
+# Parse command line arguments
+TARGET="all"
+while getopts "t:" opt; do
+  case $opt in
+    t)
+      TARGET=$OPTARG
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+  esac
+done
+
+if [ "$TARGET" == "all" ]; then
+    setup
+else
+    if declare -f "${TARGET}_setup" > /dev/null; then
+        "${TARGET}_setup"
+    elif declare -f "${TARGET}" > /dev/null; then
+        "${TARGET}"
+    else
+        echo "Error: Function ${TARGET}_setup or ${TARGET} not found"
+        exit 1
+    fi
+fi
