@@ -373,6 +373,7 @@ nvim_setup() {
 
     # install rust
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    exec bash
     rustup update stable
 
     # install npm and dependencies
@@ -384,7 +385,7 @@ nvim_setup() {
 
     # install neovim and config
     bob install stable
-    bobo use stabe
+    bob use stable
 
     rm -rf $HOME/.config/nvim
     cp -r $CONFIGS/nvim $HOME/.config/nvim
