@@ -1,97 +1,242 @@
 {
-    "editor.fontFamily": "'Fira Code'",
-    // vim extension keybinding
-    "vim.normalModeKeyBindings": [
+    "workbench.colorTheme": "Gruvbox Material Dark",
+    "workbench.iconTheme": "file-icons",
+    "clangd.path": "/home/jonguk/.config/Code/User/globalStorage/llvm-vs-code-extensions.vscode-clangd/install/20.1.0/clangd_20.1.0/bin/clangd",
+    "workbench.secondarySideBar.defaultVisibility": "hidden",
+    "extensions.ignoreRecommendations": true,
+    "editor.inlayHints.enabled": "on",
+    "latex-workshop.latex.tools": [
         {
-            "before": [
-                "u"
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-pdf",
+                "-outdir=%OUTDIR%",
+                "%DOC%"
             ],
-            "after": [],
-            "commands": [
-                "undo"
+            "env": {}
+        },
+        {
+            "name": "lualatexmk",
+            "command": "latexmk",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-lualatex",
+                "-outdir=%OUTDIR%",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "xelatexmk",
+            "command": "latexmk",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-xelatex",
+                "-outdir=%OUTDIR%",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "latexmk_rconly",
+            "command": "latexmk",
+            "args": [
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "pdflatex",
+            "command": "pdflatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "bibtex",
+            "command": "bibtex",
+            "args": [
+                "%DOCFILE%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "rnw2tex",
+            "command": "Rscript",
+            "args": [
+                "-e",
+                "knitr::opts_knit$set(concordance = TRUE); knitr::knit('%DOCFILE_EXT%')"
+            ],
+            "env": {}
+        },
+        {
+            "name": "jnw2tex",
+            "command": "julia",
+            "args": [
+                "-e",
+                "using Weave; weave(\"%DOC_EXT%\", doctype=\"tex\")"
+            ],
+            "env": {}
+        },
+        {
+            "name": "jnw2texminted",
+            "command": "julia",
+            "args": [
+                "-e",
+                "using Weave; weave(\"%DOC_EXT%\", doctype=\"texminted\")"
+            ],
+            "env": {}
+        },
+        {
+            "name": "pnw2tex",
+            "command": "pweave",
+            "args": [
+                "-f",
+                "tex",
+                "%DOC_EXT%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "pnw2texminted",
+            "command": "pweave",
+            "args": [
+                "-f",
+                "texminted",
+                "%DOC_EXT%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "tectonic",
+            "command": "tectonic",
+            "args": [
+                "--synctex",
+                "--keep-logs",
+                "--print",
+                "%DOC%.tex"
+            ],
+            "env": {}
+        }
+    ],
+    "latex-workshop.latex.recipes": [
+
+        {
+            "name": "latexmk",
+            "tools": [
+                "latexmk"
             ]
         },
         {
-            "before": [
-                "C-r"
-            ],
-            "after": [],
-            "commands": [
-                "redo"
+            "name": "latexmk (latexmkrc)",
+            "tools": [
+                "latexmk_rconly"
             ]
         },
         {
-            "before": [
-                "g",
-                "d"
-            ],
-            "commands": [
-                "extension.goto-symbol-stack.goToSymbolDeclaration"
+            "name": "latexmk (lualatex)",
+            "tools": [
+                "lualatexmk"
             ]
         },
         {
-            "before": [
-                "g",
-                "shift+d"
-            ],
-            "commands": [
-                "editor.action.goToReferences"
-            ],
-            "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor"
+            "name": "latexmk (xelatex)",
+            "tools": [
+                "xelatexmk"
+            ]
         },
+        {
+            "name": "pdflatex -> bibtex -> pdflatex * 2",
+            "tools": [
+                "pdflatex",
+                "bibtex",
+                "pdflatex",
+                "pdflatex"
+            ]
+        },
+        {
+            "name": "Compile Rnw files",
+            "tools": [
+                "rnw2tex",
+                "latexmk"
+            ]
+        },
+        {
+            "name": "Compile Jnw files",
+            "tools": [
+                "jnw2tex",
+                "latexmk"
+            ]
+        },
+        {
+            "name": "Compile Pnw files",
+            "tools": [
+                "pnw2tex",
+                "latexmk"
+            ]
+        },
+        {
+            "name": "tectonic",
+            "tools": [
+                "tectonic"
+            ]
+        }
     ],
-    "vim.handleKeys": {
-        "g d": false,
-    },
-    "settingsSync.keybindingsPerPlatform": false,
-    "python.envFile": "${workspaceFolder}/.env",
-    "python.formatting.provider": "none",
-    "black-formatter.args": [
-        "--line-length",
-        "100"
+    "latex-workshop.latex.external.build.command": "make",
+    "latex-workshop.latex.external.build.args": [
+        "-C",
+        "paper",
+        "all"
     ],
-    "eslint.enable": true,
-    "eslint.validate": ["javascript", "javascriptreact"],
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter",
-        "editor.formatOnSave": true,
-        "editor.formatOnType": true,
+    "latex-workshop.latex.autoBuild.run": "onSave",
+    "git.confirmSync": false,
+    "files.trimTrailingWhitespace": true,
+    "[latex]": {
+        "editor.defaultFormatter": "James-Yu.latex-workshop",
+        "editor.defaultFoldingRangeProvider": "James-Yu.latex-workshop",
     },
-    "[c]": {
-        "editor.defaultFormatter": "xaver.clang-format",
-        "editor.formatOnSave": true
-    },
-    "[cpp]": {
-        "editor.defaultFormatter": "xaver.clang-format",
-        "editor.formatOnSave": true
-    },
-    "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.formatOnSave": true
-    },
-    "cmake.configureOnOpen": true,
-    "window.zoomLevel": 1,
-    "files.watcherExclude": {
-        "**/.bloop": true,
-        "**/.metals": true,
-        "**/.ammonite": true
-    },
-    "metals.mavenScript": "/home/jwhur/spark/build/mvn",
-    "settingsSync.ignoredSettings": [
-        "metals.mavenScript"
+    "editor.wordWrap": "off",
+    "editor.wordWrapColumn": 80,
+    "editor.rulers": [
+        80
     ],
-    "metals.javaHome": "/usr/lib/jvm/java-8-openjdk-amd64",
-    "metals.sbtScript": "/home/jwhur/spark/build/sbt",
-    // "emeraldwalk.runonsave": {
-    //     "commands": [
-    //         {
-    //             "match": "\\.tex$",
-    //             "cmd": "make"
-    //         }
-    //     ]
-    // },
-    "editor.inlineSuggest.enabled": true,
-    "rewrap.wrappingColumn": 60,
-    "python.defaultInterpreterPath": "/usr/bin/python3",
-    "javascript.format.semicolons": "insert",
+    "rewrap.autoWrap.enabled": true,
+    "rewrap.wrappingColumn": 0,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "explorer.confirmDragAndDrop": false,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "chat.editing.confirmEditRequestRemoval": false,
+    "terminal.integrated.enableMultiLinePasteWarning": "never",
+    "editor.fontFamily": "'JetBrainsMono NL', 'monospace', monospace",
+    "editor.fontLigatures": true,
+    "vim.insertModeKeyBindings": [ {
+        "before":   [ "<C-d>" ],
+        "commands": [ "editor.action.addSelectionToNextFindMatch" ]
+    } ],
+    "vim.visualModeKeyBindings": [ {
+            "before":   [ "<C-d>" ],
+            "commands": [ "editor.action.addSelectionToNextFindMatch" ]
+    } ],
+    "vim.normallModeKeyBindings": [ {
+            "before":   [ "<C-d>" ],
+            "commands": [ "editor.action.addSelectionToNextFindMatch" ]
+    } ],
+    "vim.handleKeys": { "<C-d>": true },
+    "vim.useSystemClipboard": true,
+    "gruvboxMaterial.darkContrast": "hard",
+    "gruvboxMaterial.highContrast": true,
+    "remote.autoForwardPortsSource": "hybrid",
+    "gruvboxMaterial.darkPalette": "mix",
 }

@@ -9,7 +9,7 @@ function install {
         if [[ $pkg != "\\" ]]
         then
             if [[ $(dpkg -s ${pkg} | grep Status) == *"installed" ]]
-            then 
+            then
                 echo "[-] $1 is already installed"
             else
                 sudo apt install -y $1
@@ -23,7 +23,7 @@ function git_setup {
     echo "[*] git_setup"
 
     install "git"
-    
+
     cp $CONFIGS/git/gitconfig $HOME/.gitconfig
 
     echo "[-] git config --global user.name: "
@@ -62,7 +62,7 @@ function i3_setup {
     install "feh"
     install "polybar"
     install "net-tools"
-    
+
     cp $CONFIGS/i3/config $HOME/.config/i3/config
     cp -r $CONFIGS/i3/scripts $HOME/.config/i3/
     cp $CONFIGS/i3/i3blocks.conf $HOME/.config/i3/i3blocks.conf
@@ -164,9 +164,9 @@ function qogir_setup {
     popd
     popd
 
-    sudo cp -r .local/share/icons/Qogir /usr/share/icons
-    sudo cp -r .local/share/icons/Qogir-dark /usr/share/icons
-    sudo cp -r .local/share/icons/Qogir-light /usr/share/icons
+    sudo cp -r $HOME/.local/share/icons/Qogir /usr/share/icons
+    sudo cp -r $HOME/.local/share/icons/Qogir-Dark /usr/share/icons
+    sudo cp -r $HOME/.local/share/icons/Qogir-Light /usr/share/icons
 
     rm -rf tmp
 }
@@ -275,7 +275,7 @@ function rclone_setup {
     cp $CONFIGS/rclone/rclone-sync.sh $SYNC_SCRIPT
 
     echo "[-] register auto-backup"
-    (crontab -l 2>/dev/null; echo "0 0 * * * gsync $HOME/google-drive > /dev/null 2>&1") | crontab -e 
+    (crontab -l 2>/dev/null; echo "0 0 * * * gsync $HOME/google-drive > /dev/null 2>&1") | crontab -e
 }
 
 
@@ -292,7 +292,7 @@ function ranger_setup {
 }
 
 function _docker_setup {
-    #install "docker.io"
+    install "docker.io"
 
     sudo systemctl enable --now docker.service
     sudo usermod -aG docker $USER
@@ -355,28 +355,65 @@ EOF
     systemctl --user status xclip_listener.service
 }
 
+lua_setup() {
+    echo "[*] lua setup"
+
+    sudo apt install -y lua5.1 liblua5.1-dev
+    wget https://luarocks.org/releases/luarocks-3.12.2.tar.gz
+    tar zxpf luarocks-3.12.2.tar.gz
+    pushd luarocks-3.12.2 >> /dev/null
+    ./configure && make && sudo make install
+    popd >> /dev/null
+
+    rm -rf luarocks-3.12.2*
+}
+
+nvim_setup() {
+    echo "[*] nvim setup"
+
+    # install rust
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    rustup update stable
+
+    # install npm and dependencies
+    sudo apt install -y npm
+    sudo npm install -g dockerfile-language-server-nodejs
+
+    # install bob-nvim
+    cargo install --git https://github.com/MordechaiHadad/bob.git
+
+    # install neovim and config
+    bob install stable
+    bobo use stabe
+
+    rm -rf $HOME/.config/nvim
+    cp -r $CONFIGS/nvim $HOME/.config/nvim
+}
+
 ###############################################################################
 
 function setup {
-    #sudo apt update
+    sudo apt update
 
     # nosudo
-    #git_setup
+    git_setup
     gdb_setup
-    #i3_setup
-    #vim_setup
-    #bash_setup
-    #zsh_setup
-    #tmux_setup
-    #evince_setup
-    #fcitx5_setup
-    #_rclone_setup
-    #arandr_setup
-    #qogir_setup
-    #pyenv_setup
-    #ranger_setup
-    #_docker_setup
-    #vscode_setup
+    i3_setup
+    vim_setup
+    bash_setup
+    zsh_setup
+    tmux_setup
+    evince_setup
+    fcitx5_setup
+    _rclone_setup
+    arandr_setup
+    qogir_setup
+    pyenv_setup
+    ranger_setup
+    _docker_setup
+    vscode_setup
+    lua_setup
+    nvim_setup
 }
 
 setup
