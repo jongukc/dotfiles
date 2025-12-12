@@ -30,4 +30,5 @@ require("lazy").setup({
 	require("plugins.comment"),
 	require("plugins.misc"),
 	require("plugins.alpha"),
+	require("plugins.undotree"),
 })

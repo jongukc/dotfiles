@@ -20,6 +20,9 @@ vim.keymap.set("n", "<C-q>", "<cmd> q <CR>", opts)
 -- delete single character without copying into register
 vim.keymap.set("n", "x", '"_x', opts)
 
+-- Git
+vim.keymap.set("n", "<leader>gs", vim.cmd.Git)
+
 -- Vertical scroll and center
 vim.keymap.set("n", "<C-d>", "<C-d>zz", opts)
 vim.keymap.set("n", "<C-u>", "<C-u>zz", opts)
