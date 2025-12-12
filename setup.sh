@@ -4,12 +4,9 @@ set -ex
 CONFIGS=$PWD/configs
 
 function install {
-    for pkg in $1
-    do
-        if [[ $pkg != "\\" ]]
-        then
-            if [[ $(dpkg -s ${pkg} | grep Status) == *"installed" ]]
-            then
+    for pkg in $1; do
+        if [[ $pkg != "\\" ]]; then
+            if [[ $(dpkg -s ${pkg} | grep Status) == *"installed" ]]; then
                 echo "[-] $1 is already installed"
             else
                 sudo apt install -y $1
@@ -17,7 +14,6 @@ function install {
         fi
     done
 }
-
 
 function git_setup {
     echo "[*] git_setup"
@@ -112,7 +108,7 @@ function zsh_setup {
 
     install "fzf"
 
-    echo "export FZF_CONFIGS_COMMAND='fd -type f'" >> $HOME/.envvars
+    echo "export FZF_CONFIGS_COMMAND='fd -type f'" >>$HOME/.envvars
 
     echo "[+] Changing default shell"
     sudo chsh -s $(which zsh) $USER
@@ -123,7 +119,7 @@ function tmux_setup {
 
     install "tmux xclip"
 
-    cp $CONFIGS/tmux/tmux.conf $HOME/.tmux.conf
+    cp -r $CONFIGS/tmux $HOME/.config/tmux
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 }
 
@@ -182,7 +178,7 @@ function rclone_setup {
     rclone config
 
     mkdir $LOCAL_DIR
-    rclone sync --verbose  "google-drive:/" $LOCAL_DIR
+    rclone sync --verbose "google-drive:/" $LOCAL_DIR
 
     echo "[*] setup automatic syncing"
     SYNC_SCRIPT="$HOME/.config/rclone/rclone-sync.sh"
@@ -199,7 +195,7 @@ function rclone_setup {
     if test -f $SERVICE_FILE; then
         echo "[-] Unit file already exists: $SERVICE_FILE - Not overwriting"
     else
-        cat << EOF > $SERVICE_FILE
+        cat <<EOF >$SERVICE_FILE
 [Unit]
 Description=rclone-sync google-drive
 
@@ -226,7 +222,7 @@ function _rclone_setup {
     rclone config
 
     #mkdir $LOCAL_DIR
-    rclone sync --verbose  "google-drive:/" $LOCAL_DIR
+    rclone sync --verbose "google-drive:/" $LOCAL_DIR
 
     echo "[*] setup automatic syncing"
     SYNC_SCRIPT="$HOME/.config/rclone/rclone-sync.sh"
@@ -243,7 +239,7 @@ function _rclone_setup {
     if test -f $SERVICE_FILE; then
         echo "[-] Unit file already exists: $SERVICE_FILE - Not overwriting"
     else
-        cat << EOF > $SERVICE_FILE
+        cat <<EOF >$SERVICE_FILE
 [Unit]
 Description=rclone-sync google-drive
 
@@ -268,16 +264,18 @@ function rclone_setup {
     rclone config
 
     mkdir $LOCAL_DIR
-    rclone sync --verbose  "google-drive:/" $LOCAL_DIR
+    rclone sync --verbose "google-drive:/" $LOCAL_DIR
 
     echo "[*] setup automatic syncing"
     SYNC_SCRIPT="$HOME/.config/rclone/rclone-sync.sh"
     cp $CONFIGS/rclone/rclone-sync.sh $SYNC_SCRIPT
 
     echo "[-] register auto-backup"
-    (crontab -l 2>/dev/null; echo "0 0 * * * gsync $HOME/google-drive > /dev/null 2>&1") | crontab -e
+    (
+        crontab -l 2>/dev/null
+        echo "0 0 * * * gsync $HOME/google-drive > /dev/null 2>&1"
+    ) | crontab -e
 }
-
 
 function pyenv_setup {
     echo "[*] pyenv_setup"
@@ -337,7 +335,7 @@ function xclip_setup {
     if test -f $SERVICE_FILE; then
         echo "[-] Unit file already exists: $SERVICE_FILE - Not overwritting"
     else
-        cat << EOF > $SERVICE_FILE
+        cat <<EOF >$SERVICE_FILE
 [Unit]
 Description=Network copy backend for tmux based on xclip
 After=syslog.target network.target sockets.target network-online.target multi-user.target
@@ -361,9 +359,9 @@ lua_setup() {
     sudo apt install -y lua5.1 liblua5.1-dev
     wget https://luarocks.org/releases/luarocks-3.12.2.tar.gz
     tar zxpf luarocks-3.12.2.tar.gz
-    pushd luarocks-3.12.2 >> /dev/null
+    pushd luarocks-3.12.2 >>/dev/null
     ./configure && make && sudo make install
-    popd >> /dev/null
+    popd >>/dev/null
 
     rm -rf luarocks-3.12.2*
 }
@@ -420,23 +418,23 @@ function setup {
 # Parse command line arguments
 TARGET="all"
 while getopts "t:" opt; do
-  case $opt in
+    case $opt in
     t)
-      TARGET=$OPTARG
-      ;;
+        TARGET=$OPTARG
+        ;;
     \?)
-      echo "Invalid option: -$OPTARG" >&2
-      exit 1
-      ;;
-  esac
+        echo "Invalid option: -$OPTARG" >&2
+        exit 1
+        ;;
+    esac
 done
 
 if [ "$TARGET" == "all" ]; then
     setup
 else
-    if declare -f "${TARGET}_setup" > /dev/null; then
+    if declare -f "${TARGET}_setup" >/dev/null; then
         "${TARGET}_setup"
-    elif declare -f "${TARGET}" > /dev/null; then
+    elif declare -f "${TARGET}" >/dev/null; then
         "${TARGET}"
     else
         echo "Error: Function ${TARGET}_setup or ${TARGET} not found"
