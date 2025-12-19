@@ -3,8 +3,7 @@
 CONFIGS=$PWD/configs
 
 function install {
-    for pkg in $1;
-    do
+    for pkg in $1; do
         if [ "$(pacsift --exact --name $pkg)" ]; then
             sudo pacman -Sy --needed --noconfirm $pkg
         elif [ "$(yay -Qk $pkg)" ]; then
@@ -43,6 +42,7 @@ function i3_setup {
     cp $CONFIGS/i3/i3blocks.conf $HOME/.config/i3/i3blocks.conf
     mkdir -p $HOME/.screenlayout
     cp bg.png $HOME/.screenlayout/bg.png
+    cp dual-monitor.sh $HOME/.screenlayout/dual-monitor.sh
 }
 
 function vim_setup {
@@ -76,7 +76,7 @@ function zsh_setup {
 
     install "fzf"
 
-    echo "export FZF_CONFIGS_COMMAND='fd -type f'" >> $HOME/.envvars
+    echo "export FZF_CONFIGS_COMMAND='fd -type f'" >>$HOME/.envvars
 
     echo "[+] Changing default shell"
     sudo chsh -s $(which zsh) $USER
@@ -116,7 +116,7 @@ function rclone_setup {
     rclone config
 
     mkdir $LOCAL_DIR
-    rclone sync --verbose  "google-drive:/" $LOCAL_DIR
+    rclone sync --verbose "google-drive:/" $LOCAL_DIR
 
     echo "[*] setup automatic syncing"
     SYNC_SCRIPT="$HOME/.config/rclone/rclone-sync.sh"
@@ -133,7 +133,7 @@ function rclone_setup {
     if test -f $SERVICE_FILE; then
         echo "[-] Unit file already exists: $SERVICE_FILE - Not overwriting"
     else
-        cat << EOF > $SERVICE_FILE
+        cat <<EOF >$SERVICE_FILE
 [Unit]
 Description=rclone-sync google-drive
 
@@ -148,7 +148,6 @@ EOF
     systemctl --user enable --now rclone_sync.google-drive
     systemctl --user status rclone_sync.google-drive
 }
-
 
 function pyenv_setup {
     echo "[*] pyenv_setup"
@@ -211,7 +210,7 @@ function xclip_setup {
     if test -f $SERVICE_FILE; then
         echo "[-] Unit file already exists: $SERVICE_FILE - Not overwritting"
     else
-        cat << EOF > $SERVICE_FILE
+        cat <<EOF >$SERVICE_FILE
 [Unit]
 Description=Network copy backend for tmux based on xclip
 After=syslog.target network.target sockets.target network-online.target multi-user.target
@@ -229,26 +228,89 @@ EOF
     systemctl --user status xclip_listener.service
 }
 
+lua_setup() {
+    echo "[*] lua setup"
+
+    sudo pacman -S lua5.1 liblua5.1-dev
+    wget https://luarocks.org/releases/luarocks-3.12.2.tar.gz
+    tar zxpf luarocks-3.12.2.tar.gz
+    pushd luarocks-3.12.2 >>/dev/null
+    ./configure && make && sudo make install
+    popd >>/dev/null
+
+    rm -rf luarocks-3.12.2*
+}
+
+nvim_setup() {
+    echo "[*] nvim setup"
+
+    # install rust
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    source ~/.zshrc
+    rustup update stable
+
+    # install npm and dependencies
+    install "npm"
+    sudo npm install -g dockerfile-language-server-nodejs
+
+    # install bob-nvim
+    cargo install --git https://github.com/MordechaiHadad/bob.git
+
+    # install neovim and config
+    bob install stable
+    bob use stable
+
+    rm -rf $HOME/.config/nvim
+    cp -r $CONFIGS/nvim $HOME/.config/nvim
+}
+
 ###############################################################################
 
 function setup {
     set -ex
 
     # nosudo
-    #git_setup
-    #gdb_setup
-    #i3_setup
-    #vim_setup
-    #bash_setup
-    #zsh_setup
-    #tmux_setup
-    #evince_setup
-    #fcitx5_setup
-    #rclone_setup
-    #pyenv_setup
-    #ranger_setup
-    #_docker_setup
+    git_setup
+    gdb_setup
+    i3_setup
+    vim_setup
+    bash_setup
+    zsh_setup
+    tmux_setup
+    evince_setup
+    fcitx5_setup
+    rclone_setup
+    pyenv_setup
+    ranger_setup
+    _docker_setup
     vscode_setup
+    lua_setup
+    nvim_setup
 }
 
-setup
+# Parse command line arguments
+TARGET="all"
+while getopts "t:" opt; do
+    case $opt in
+    t)
+        TARGET=$OPTARG
+        ;;
+    \?)
+        echo "Invalid option: -$OPTARG" >&2
+        exit 1
+        ;;
+    esac
+done
+
+if [ "$TARGET" == "all" ]; then
+    setup
+else
+    if declare -f "${TARGET}_setup" >/dev/null; then
+        "${TARGET}_setup"
+    elif declare -f "${TARGET}" >/dev/null; then
+        "${TARGET}"
+    else
+        echo "Error: Function ${TARGET}_setup or ${TARGET} not found"
+        exit 1
+    fi
+fi
