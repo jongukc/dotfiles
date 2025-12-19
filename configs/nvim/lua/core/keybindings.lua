@@ -37,9 +37,6 @@ vim.keymap.set("n", "<Down>", ":resize +2<CR>", opts)
 vim.keymap.set("n", "<Left>", ":vertical resize -2<CR>", opts)
 vim.keymap.set("n", "<Right>", ":vertical resize +2<CR>", opts)
 
--- Neotree
-vim.keymap.set("n", "<C-b>", ":Neotree toggle<CR>")
-
 -- Buffers
 vim.keymap.set("n", "<Tab>", ":bnext<CR>", opts)
 vim.keymap.set("n", "<S-Tab>", ":bprevious<CR>", opts)
@@ -89,3 +86,6 @@ end, { desc = "Go to next diagnostic message" })
 
 vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
+
+-- Exiting terminal mode with esc
+vim.api.nvim_set_keymap("t", "<Esc>", "<C-\\><C-n>", { noremap = true, silent = true })

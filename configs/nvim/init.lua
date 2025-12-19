@@ -1,5 +1,6 @@
 require("core.keybindings")
 require("core.options")
+require("core.filetype")
 
 vim.g.have_nerd_font = true
 
@@ -18,7 +19,6 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
 	require("plugins.neotree"),
 	require("plugins.treesitter"),
-	require("plugins.gruvbox-material"),
 	require("plugins.bufferline"),
 	require("plugins.lualine"),
 	require("plugins.telescope"),
@@ -31,4 +31,19 @@ require("lazy").setup({
 	require("plugins.misc"),
 	require("plugins.alpha"),
 	require("plugins.undotree"),
+	require("plugins.markview"),
+	require("plugins.multicursor"),
+	require("plugins.vimtex"),
+	-- Colorschemes
+	require("plugins.themes.tokyonight"),
+	require("plugins.themes.nord"),
+	require("plugins.themes.kanagawa"),
+	require("plugins.themes.monokai"),
+	require("plugins.themes.modus"),
+	require("plugins.themes.gruvbox-material"),
+	require("plugins.themes.gruber-darker"),
 })
+
+-- Set colorscheme
+
+vim.cmd.colorscheme("gruber-darker")

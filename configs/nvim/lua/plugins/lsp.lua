@@ -1,5 +1,8 @@
 return {
 	"neovim/nvim-lspconfig",
+	opts = {
+		autoformat = false,
+	},
 	dependencies = {
 		-- Automatically install LSPs and related tools to stdpath for Neovim
 		{ "mason-org/mason.nvim", config = true }, -- NOTE: Must be loaded before dependants
