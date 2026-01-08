@@ -46,4 +46,4 @@ require("lazy").setup({
 
 -- Set colorscheme
 
-vim.cmd.colorscheme("gruber-darker")
+vim.cmd.colorscheme("gruvbox-material")
