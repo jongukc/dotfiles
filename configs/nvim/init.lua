@@ -17,9 +17,10 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-	require("plugins.neotree"),
+	-- require("plugins.neotree"),
 	require("plugins.treesitter"),
-	require("plugins.bufferline"),
+	require("plugins.palmer"),
+	-- require("plugins.bufferline"),
 	require("plugins.lualine"),
 	require("plugins.telescope"),
 	require("plugins.lsp"),
@@ -29,11 +30,12 @@ require("lazy").setup({
 	require("plugins.indent-blankline"),
 	require("plugins.comment"),
 	require("plugins.misc"),
-	require("plugins.alpha"),
+	-- require("plugins.alpha"),
 	require("plugins.undotree"),
 	require("plugins.markview"),
 	require("plugins.multicursor"),
 	require("plugins.vimtex"),
+	require("plugins.oil"),
 	-- Colorschemes
 	require("plugins.themes.tokyonight"),
 	require("plugins.themes.nord"),
