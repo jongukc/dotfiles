@@ -3,7 +3,7 @@
  * Maintainer: joekamprad [joekamprad //a_t// endeavouros.com]
  *******************************************************/
 configuration {
-    font:                "JetBrainsMono NF 20";
+    font:                "JetBrainsMono NF 12";
     show-icons:          false;
     icon-theme:          "Qogir";
     display-drun:        "Apps";
@@ -11,8 +11,15 @@ configuration {
     scroll-method:       0;
     disable-history:     false;
     sidebar-mode:        false;
+    kb-remove-char-back: "";
+    kb-remove-to-eol:       "";
+    kb-mode-complete:    "";
+    kb-accept-entry:    "Control+m,Return,KP_Enter";
+    kb-row-up:          "Control+k";
+    kb-row-down:        "Control+j";
+    kb-row-left:        "Control+h";
+    kb-row-right:       "Control+l";
 }
-
 @import "~/.config/rofi/config.rasi"
 /* Insert theme modifications after this */
 
