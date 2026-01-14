@@ -1,39 +1,44 @@
-# Sway config file
-# Ported from i3 config
+#  Sway config for Arch Linux
 
 set $mod Mod4
+set $term foot
+set $menu rofi -show drun -font "JetBrainsMono NF 14" -icon-theme "Papirus" -show-icons
 
-# Font for window titles.
-font pango: JetBrainsMono NF 12
+output eDP-1 scale 1.6 bg ~/.screen/bg.png fill
 
-# Use Mouse+$mod to drag floating windows to their wanted position
-floating_modifier $mod
+exec_always export LIBVA_DRIVER_NAME=iHD
+exec_always export MOZ_ENABLE_WAYLAND=1
 
-# Start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+input type:keyboard {
+    xkb_options ctrl:swapcaps
+    repeat_delay 300
+    repeat_rate 50
+}
 
-# Kill focused window
+input type:touchpad {
+    dwt enabled             # Disable While Typing
+    tap enabled             # Tap to click
+    natural_scroll enabled  # Mac-style scrolling
+    middle_emulation enabled
+}
+
+font pango:JetBrainsMono NF 11
+default_border pixel 2
+gaps inner 5
+gaps outer 0
+
+# Key bindings
+bindsym $mod+Return exec $term
 bindsym $mod+Shift+q kill
-
-# Start your launcher
-bindsym $mod+d exec rofi -modi drun -show drun -font "JetBrainsMono NF 14" -config ~/.config/rofi/rofidmenu.rasi
-bindsym $mod+t exec rofi -show window -font "JetBrainsMono NF 14" -config ~/.config/rofi/rofidmenu.rasi
-
-# Power menu
-bindsym $mod+Shift+e exec ~/.config/sway/scripts/powermenu
-
-# Reload the configuration file
+bindsym $mod+d exec $menu
 bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+bindsym $mod+Shift+x exec swaynag -t warning -m 'Exit Sway?' -b 'Yes' 'swaymsg exit'
 
-# Exit sway (logs you out of your Wayland session)
-bindsym $mod+Shift+r exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
-
-# Moving around:
 bindsym $mod+h focus left
 bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
-
 bindsym $mod+Left focus left
 bindsym $mod+Down focus down
 bindsym $mod+Up focus up
@@ -43,28 +48,27 @@ bindsym $mod+Shift+h move left
 bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
-
 bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
-# Layout stuff:
-bindsym $mod+backslash split h
-bindsym $mod+minus split v
-bindsym $mod+f fullscreen toggle
+bindsym $mod+b splith
+bindsym $mod+v splitv
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
+bindsym $mod+f fullscreen
 bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 bindsym $mod+a focus parent
 
-# Scratchpad:
-bindsym $mod+Shift+minus move scratchpad
-bindsym $mod+Shift+plus scratchpad show
+bindsym $mod+backslash split h
+bindsym $mod+minus split v
 
-# Workspaces:
+bindsym $mod+plus scratchpad show
+bindsym $mod+Shift+plus move scratchpad
+
 set $ws1 "1"
 set $ws2 "2"
 set $ws3 "3"
@@ -98,60 +102,38 @@ bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 
-# Resizing containers:
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+bindsym XF86MonBrightnessUp exec light -A 5
+bindsym XF86MonBrightnessDown exec light -U 5
+bindsym Print exec grim -g "$(slurp)" - | wl-copy
+
 mode "resize" {
-    bindsym j resize shrink width 10 px or 10 ppt
-    bindsym k resize grow height 10 px or 10 ppt
-    bindsym l resize shrink height 10 px or 10 ppt
-    bindsym h resize grow width 10 px or 10 ppt
+    bindsym h resize shrink width 10px
+    bindsym j resize grow height 10px
+    bindsym k resize shrink height 10px
+    bindsym l resize grow width 10px
 
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
 
-# Lock screen
-bindsym $mod+q exec ~/.config/sway/scripts/blur-lock
-
-# Screenshots
-bindsym Print exec grim -g "$(slurp)" - | wl-copy
-
-# Media keys
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10%
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10%
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
-bindsym XF86MonBrightnessUp exec light -A 5
-bindsym XF86MonBrightnessDown exec light -U 5
-
-# --- Sway Specific Configuration ---
-
-# Input configuration
-# Equivalent to: setxkbmap -option "ctrl:swapcaps"
-input * {
-    xkb_options ctrl:swapcaps
-}
-
-# Output configuration (Wallpaper)
-# Replace /home/chickpiz/.screenlayout/bg.png with your actual path if different or use a variable
-output * bg ~/.screen/bg.png fill
-
-# Status Bar: Waybar
 bar {
     swaybar_command waybar
 }
 
-# Idle configuration
-exec swayidle -w \
-    timeout 300 'swaylock -f -c 000000' \
-    timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-    before-sleep 'swaylock -f -c 000000'
-
-# Notifications
 exec mako
 
-# Network Applet
 exec nm-applet --indicator
 
-# Start fcitx5 deamon
-exec fcitx5 &
+exec fcitx5 -d
+
+exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+
+exec swayidle -w \
+    timeout 180 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+    timeout 300 'swaylock -f -c 000000' \
+    before-sleep 'swaylock -f -c 000000'

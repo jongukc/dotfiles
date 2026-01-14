@@ -6,11 +6,7 @@ CONFIGS="$PWD/configs"
 
 function install {
     for pkg in $1; do
-        if [ "$(pacsift --exact --name $pkg)" ]; then
-            sudo pacman -Sy --needed --noconfirm $pkg
-        elif [ "$(yay -Qk $pkg)" ]; then
-            yay -Sy --needed --noconfirm $pkg
-        fi
+        yay -Sy --needed --noconfirm $pkg
     done
 }
 
@@ -232,10 +228,6 @@ function _docker_setup {
     sleep 3
 
     sudo docker run hello-world
-
-    if [ -f "$CONFIGS/docker/Dockerfile" ]; then
-        sudo docker build --build-arg user="$USER" -t init-ubuntu:20.04 "$CONFIGS/docker"
-    fi
 }
 
 function vscode_setup {
@@ -268,8 +260,8 @@ function xclip_setup {
     echo "[*] setup listening on port 19988"
 
     mkdir -p "$HOME/.config/xclip"
-    XCLIP_SCRIPT="$HOME/.config/xclip/xclip-listen.sh"
-    [ -f "$CONFIGS/xclip/xclip-listen.sh" ] && cp "$CONFIGS/xclip/xclip-listen.sh" "$XCLIP_SCRIPT"
+    XCLIP_SCRIPT="$HOME/.config/xclip/xclip-listener.sh"
+    [ -f "$CONFIGS/xclip/xclip-listener.sh" ] && cp "$CONFIGS/xclip/xclip-listener.sh" "$XCLIP_SCRIPT"
     chmod +x "$XCLIP_SCRIPT"
 
     sudo loginctl enable-linger "$USER"
@@ -347,22 +339,22 @@ function font_setup {
 function setup {
     set -e
 
-    nosudo
-    yay_setup
-    git_setup
-    gdb_setup
-    # i3_setup
-    sway_setup
-    vim_setup
-    bash_setup
-    zsh_setup
-    tmux_setup
-    evince_setup
-    fcitx5_setup
-    ranger_setup
-    xclip_setup
-    pyenv_setup
-    _docker_setup
+    #nosudo
+    #yay_setup
+    #git_setup
+    #gdb_setup
+    ## i3_setup
+    #sway_setup
+    #vim_setup
+    #bash_setup
+    #zsh_setup
+    #tmux_setup
+    #evince_setup
+    #fcitx5_setup
+    #ranger_setup
+    #xclip_setup
+    #pyenv_setup
+    #_docker_setup
     vscode_setup
     lua_setup
     nvim_setup
