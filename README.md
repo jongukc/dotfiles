@@ -4,7 +4,9 @@
 
 - **git**
 - **gdb**
-- **i3**
+- **sway**
+- **waybar**
+- **rofi-wayland**
 - **vim**
 - **bash**
 - **zsh**

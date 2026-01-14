@@ -54,27 +54,49 @@ function gdb_setup {
     [ -f "$CONFIGS/gdb/gdbinit-gef.py" ] && cp "$CONFIGS/gdb/gdbinit-gef.py" "$HOME/.gdbinit-gef.py"
 }
 
-function i3_setup {
-    echo "[*] i3_setup"
+# function i3_setup {
+#     echo "[*] i3_setup"
+#
+#     install "xorg xorg-xinit i3-wm i3status i3lock dmenu xterm"
+#     install "rofi"
+#     install "feh"
+#     install "polybar"
+#
+#     mkdir -p "$HOME/.config/i3"
+#     [ -f "$CONFIGS/i3/config" ] && cp "$CONFIGS/i3/config" "$HOME/.config/i3/config"
+#     [ -d "$CONFIGS/i3/scripts" ] && cp -r "$CONFIGS/i3/scripts" "$HOME/.config/i3"
+#
+#     mkdir -p "$HOME/.config/rofi"
+#     cp -r "$CONFIGS/rofi" "$HOME/.config"
+#     cp -r "$CONFIGS/rofi_themes/themes" "$HOME/.local/share/rofi"
+#
+#     mkdir -p "$HOME/.config/polybar"
+#     cp -r "$CONFIGS/polybar" "$HOME/.config"
+#
+#     mkdir -p "$HOME/.screen"
+#     cp screen.sh "$HOME/.screen"
+#     cp bg.png "$HOME/.screen"
+# }
 
-    install "xorg xorg-xinit i3-wm i3status i3lock dmenu xterm"
-    install "rofi"
-    install "feh"
-    install "polybar"
+function sway_setup {
+    echo "[*] sway_setup"
 
-    mkdir -p "$HOME/.config/i3"
-    [ -f "$CONFIGS/i3/config" ] && cp "$CONFIGS/i3/config" "$HOME/.config/i3/config"
-    [ -d "$CONFIGS/i3/scripts" ] && cp -r "$CONFIGS/i3/scripts" "$HOME/.config/i3"
+    install "sway swaylock swayidle waybar grim slurp wl-clipboard light mako polkit-gnome xorg-xwayland"
+    install "rofi-wayland"
+
+    mkdir -p "$HOME/.config/sway"
+    [ -f "$CONFIGS/sway/config" ] && cp "$CONFIGS/sway/config" "$HOME/.config/sway/config"
+    [ -d "$CONFIGS/sway/scripts" ] && cp -r "$CONFIGS/sway/scripts" "$HOME/.config/sway"
+    chmod +x "$HOME/.config/sway/scripts/"*
 
     mkdir -p "$HOME/.config/rofi"
     cp -r "$CONFIGS/rofi" "$HOME/.config"
-    cp -r "$CONFIGS/rofi_themes/themes" "$HOME/.local/share/rofi"
 
-    mkdir -p "$HOME/.config/polybar"
-    cp -r "$CONFIGS/polybar" "$HOME/.config"
+    mkdir -p "$HOME/.config/waybar"
+    [ -f "$CONFIGS/waybar/config" ] && cp "$CONFIGS/waybar/config" "$HOME/.config/waybar/config"
+    [ -f "$CONFIGS/waybar/style.css" ] && cp "$CONFIGS/waybar/style.css" "$HOME/.config/waybar/style.css"
 
     mkdir -p "$HOME/.screen"
-    cp screen.sh "$HOME/.screen"
     cp bg.png "$HOME/.screen"
 }
 
@@ -314,6 +336,12 @@ function chrome_setup {
 
     install "google-chrome"
 }
+
+function font_setup {
+    echo "[*] font_setup"
+
+    install "ttf-jetbrains-mono-nerd"
+}
 ###############################################################################
 
 function setup {
@@ -323,7 +351,8 @@ function setup {
     yay_setup
     git_setup
     gdb_setup
-    i3_setup
+    # i3_setup
+    sway_setup
     vim_setup
     bash_setup
     zsh_setup
@@ -338,6 +367,7 @@ function setup {
     lua_setup
     nvim_setup
     chrome_setup
+    font_setup
     # rclone_setup
 }
 

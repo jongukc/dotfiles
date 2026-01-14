@@ -1,0 +1,47 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 30,
+    "modules-left": ["sway/workspaces", "sway/window"],
+    "modules-center": [],
+    "modules-right": ["filesystem", "pulseaudio", "sway/language", "cpu", "memory", "clock", "tray"],
+    "sway/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "format": "{name}"
+    },
+    "sway/window": {
+        "format": "{title}",
+        "max-length": 50
+    },
+    "filesystem": {
+        "interval": 30,
+        "format": "<span color='#F0C674'>{mountpoint}</span> {percentage_used}%"
+    },
+    "pulseaudio": {
+        "format": "<span color='#F0C674'>VOL</span> {volume}%",
+        "format-muted": "<span color='#707880'>muted</span>",
+        "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+        "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +1%",
+        "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -1%"
+    },
+    "sway/language": {
+        "format": "<span color='#F0C674'>{short}</span>"
+    },
+    "cpu": {
+        "interval": 10,
+        "format": "<span color='#F0C674'>CPU</span> {usage}%"
+    },
+    "memory": {
+        "interval": 30,
+        "format": "<span color='#F0C674'>RAM</span> {percentage}%"
+    },
+    "clock": {
+        "format": "<span color='#F0C674'>{:%H:%M}</span>",
+        "format-alt": "{:%Y-%m-%d %H:%M:%S}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+    },
+    "tray": {
+        "spacing": 10
+    }
+}
