@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+PICTURE=/home/chickpiz/.screenlayout/bg.png
+
+i3lock -i $PICTURE
+

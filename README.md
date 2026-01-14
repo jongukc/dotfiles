@@ -1,4 +1,4 @@
-# Dotfiles EndeavorOS (archlinux)
+# Dotfiles for vanilla Arch Linux
 
 ## Installation List
 
@@ -11,10 +11,10 @@
 - **tmux**
 - **evince**
 - **fcitx5**
-- **rclone**
 - **pyenv**
 - **ranger**
 - **docker**
 - **vscode**
 - **nvim (via [bob](https://github.com/MordechaiHadad/bob))**
 - **lua**
+- **chrome**
