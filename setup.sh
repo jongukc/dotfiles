@@ -74,6 +74,32 @@ function gdb_setup {
 #     cp bg.png "$HOME/.screen"
 # }
 
+function hyprland_setup {
+    echo "[*] hyprland_setup"
+
+    install "hyprland hyprpaper hyprlock hypridle"
+    install "waybar grim slurp wl-clipboard light mako polkit-gnome xorg-xwayland"
+    install "qt5-wayland qt6-wayland"
+    install "rofi-wayland"
+    install "foot"
+    install "mako"
+
+    rm -rf "$HOME/.config/hypr"
+    rm -rf "$HOME/.config/rofi"
+    rm -rf "$HOME/.config/waybar"
+    rm -rf "$HOME/.config/foot"
+    rm -rf "$HOME/.config/mako"
+
+    cp -r "$CONFIGS/hypr" "$HOME/.config/"
+    cp -r "$CONFIGS/rofi" "$HOME/.config/"
+    cp -r "$CONFIGS/waybar" "$HOME/.config/"
+    cp -r "$CONFIGS/foot" "$HOME/.config/"
+    cp -r "$CONFIGS/mako" "$HOME/.config/"
+
+    mkdir -p "$HOME/.screen"
+    [ -f "bg.png" ] && cp bg.png "$HOME/.screen"
+}
+
 function sway_setup {
     echo "[*] sway_setup"
 
@@ -333,28 +359,39 @@ function font_setup {
     echo "[*] font_setup"
 
     install "ttf-jetbrains-mono-nerd"
+    install "noto-fonts-cjk"
+}
+
+function theme_setup {
+    echo "[*] theme_setup"
+
+    install "arc-gtk-theme"
+
+    rm -rf "$HOME/.config/nwg-look"
+
+    cp -r "$CONFIGS/nwg-look" "$HOME/.config/"
 }
 ###############################################################################
 
 function setup {
     set -e
 
-    #nosudo
-    #yay_setup
-    #git_setup
-    #gdb_setup
-    ## i3_setup
-    #sway_setup
-    #vim_setup
-    #bash_setup
-    #zsh_setup
-    #tmux_setup
-    #evince_setup
-    #fcitx5_setup
-    #ranger_setup
-    #xclip_setup
-    #pyenv_setup
-    #_docker_setup
+    nosudo
+    yay_setup
+    git_setup
+    gdb_setup
+    # i3_setup
+    # sway_setup
+    vim_setup
+    bash_setup
+    zsh_setup
+    tmux_setup
+    evince_setup
+    fcitx5_setup
+    ranger_setup
+    xclip_setup
+    pyenv_setup
+    _docker_setup
     vscode_setup
     lua_setup
     nvim_setup

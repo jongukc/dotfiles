@@ -1,0 +1,6 @@
+font=JetBrainsMono NF 12
+
+default-timeout=10000
+
+[urgency=high]
+ignore-timeout=1

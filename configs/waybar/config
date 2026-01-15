@@ -2,46 +2,90 @@
     "layer": "top",
     "position": "top",
     "height": 30,
-    "modules-left": ["sway/workspaces", "sway/window"],
-    "modules-center": [],
-    "modules-right": ["filesystem", "pulseaudio", "sway/language", "cpu", "memory", "clock", "tray"],
-    "sway/workspaces": {
+    "margin-top": 4,
+    "margin-bottom": 8,
+    "margin-left": 8,
+    "margin-right": 8,
+    "modules-left": [],
+    "modules-center": ["hyprland/workspaces"],
+    "modules-right": [
+        "pulseaudio",
+        "cpu",
+        "memory",
+        "disk",
+        "battery",
+        "clock",
+        "network"
+        //"hyprland/language"
+    ],
+    "hyprland/workspaces": {
         "disable-scroll": true,
         "all-outputs": true,
         "format": "{name}"
     },
-    "sway/window": {
+    "hyprland/window": {
         "format": "{title}",
-        "max-length": 50
-    },
-    "filesystem": {
-        "interval": 30,
-        "format": "<span color='#F0C674'>{mountpoint}</span> {percentage_used}%"
+        "max-length": 50,
+        "separate-outputs": true
     },
     "pulseaudio": {
-        "format": "<span color='#F0C674'>VOL</span> {volume}%",
+        "format": "<span color='#7DAEA3'>VOL</span> {volume}%",
         "format-muted": "<span color='#707880'>muted</span>",
-        "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-        "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +1%",
-        "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -1%"
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "on-scroll-up": "wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
     },
-    "sway/language": {
-        "format": "<span color='#F0C674'>{short}</span>"
+    "disk": {
+        "path": "/",
+        "interval": 30,
+        "format": "<span color='#7DAEA3'>STO</span> {percentage_used}%"
+    },
+    "battery": {
+        "bat": "BAT1",
+        "interval": 60,
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "events": {
+            "on-discharging-warning": "notify-send -u normal 'Low Battery'",
+            "on-discharging-critical": "notify-send -u critical 'Very Low Battery'",
+            "on-charging-100": "notify-send -u normal 'Battery Full!'"
+        },
+        "format": "<span color='#7DAEA3'>BAT</span> {capacity}%"
+    },
+    "hyprland/language": {
+        "format": "<span color='#7DAEA3'>{}</span>",
+        "format-en": "EN",
+        "format-ko": "KR"
     },
     "cpu": {
         "interval": 10,
-        "format": "<span color='#F0C674'>CPU</span> {usage}%"
+        "format": "<span color='#7DAEA3'>CPU</span> {usage}%"
     },
     "memory": {
         "interval": 30,
-        "format": "<span color='#F0C674'>RAM</span> {percentage}%"
+        "format": "<span color='#7DAEA3'>RAM</span> {percentage}%"
     },
     "clock": {
-        "format": "<span color='#F0C674'>{:%H:%M}</span>",
+        "format": "<span color='#7DAEA3'>{:%H:%M}</span>",
         "format-alt": "{:%Y-%m-%d %H:%M:%S}",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
     },
     "tray": {
         "spacing": 10
+    },
+    "network": {
+        "format-wifi": "<span color='#7DAEA3'> </span>",
+        "format-ethernet": "<span color='#7DAEA3'> </span>",
+        "format-linked": "<span color='#7DAEA3'> </span> (No IP)",
+        "format-disconnected": "<span color='#EA6962'>⚠ </span> Disconnected",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "tooltip-format": "{ifname} via {gwaddr}"
     }
+    //"hyprland/language": {
+    //    "format": "<span color='#7DAEA3'> </span> {}",
+    //    "format-en": "EN",
+    //    "format-ko": "KR"
+    //} 
 }

@@ -1,14 +1,19 @@
 * {
-    border: none;
-    border-radius: 0;
     font-family: "JetBrainsMono NF";
     font-size: 12px;
-    min-height: 0;
+    min-height: 0px;
+}
+
+.modules-left {
+    margin: 1px 0px 1px 10px;
+}
+
+#window {
+    margin-left: 10px;
 }
 
 window#waybar {
-    background-color: #282A2E;
-    color: #C5C8C6;
+    background-color: rgba(50, 48, 47, 0);
     transition-property: background-color;
     transition-duration: .5s;
 }
@@ -29,14 +34,15 @@ window#waybar.hidden {
     text-shadow: inherit;
 }
 
-#workspaces button.focused {
+/* CHANGED: Hyprland uses .active instead of .focused */
+#workspaces button.active {
     background-color: #373B41;
-    color: #F0C674;
-    border-bottom: 3px solid #F0C674;
+    color: #7DAEA3;
+    border-bottom: 3px solid #7DAEA3;
 }
 
 #workspaces button.urgent {
-    background-color: #A54242;
+    background-color: #EA6962;
 }
 
 #clock,
@@ -63,7 +69,8 @@ window#waybar.hidden {
     color: #C5C8C6;
 }
 
-#sway-language {
-    color: #F0C674;
+/* CHANGED: Renamed from #sway-language to #language */
+#language {
+    color: #7DAEA3;
     padding: 0 5px;
 }
