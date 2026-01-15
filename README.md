@@ -4,7 +4,7 @@
 
 - **git**
 - **gdb**
-- **sway**
+- **hyprland**
 - **waybar**
 - **rofi-wayland**
 - **vim**

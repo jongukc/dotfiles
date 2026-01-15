@@ -78,11 +78,12 @@ function hyprland_setup {
     echo "[*] hyprland_setup"
 
     install "hyprland hyprpaper hyprlock hypridle"
-    install "waybar grim slurp wl-clipboard light mako polkit-gnome xorg-xwayland"
+    install "waybar grim slurp wl-clipboard light mako xorg-xwayland"
+    install "xdg-desktop-portal-hyprland hyprpolkitagent"
     install "qt5-wayland qt6-wayland"
     install "rofi-wayland"
     install "foot"
-    install "mako"
+    install "cpio cmake meson"
 
     rm -rf "$HOME/.config/hypr"
     rm -rf "$HOME/.config/rofi"
@@ -98,6 +99,30 @@ function hyprland_setup {
 
     mkdir -p "$HOME/.screen"
     [ -f "bg.png" ] && cp bg.png "$HOME/.screen"
+
+    # hyprpm update
+    # yes | hyprpm add https://github.com/outfoxxed/hy3
+    # hyprpm reload -n
+    # hyprpm enable hy3
+}
+
+function sddm_setup {
+    echo "[*] sddm_setup"
+
+    install "sddm qt5-graphicaleffects qt5-quickcontrols2 qt5-svg"
+    install "sddm-silent-theme"
+
+    sudo touch /etc/sddm.conf
+    cat <<EOF | sudo tee /etc/sddm.conf >/dev/null
+[General]
+InputMethod=qtvirtualkeyboard
+GreeterEnvironment=QML2_IMPORT_PATH=/usr/share/sddm/themes/silent/components/,QT_IM_MODULE=qtvirtualkeyboard
+
+[Theme]
+Current=silent
+
+EOF
+    sudo systemctl enable sddm
 }
 
 function sway_setup {
@@ -135,7 +160,7 @@ function bash_setup {
 
 function zsh_setup {
     echo "[*] zsh_setup"
-    install "zsh fzf"
+    install "zsh fzf autojump"
 
     echo "[+] oh-my-zsh setup"
 
@@ -318,7 +343,7 @@ EOF
 function lua_setup() {
     echo "[*] lua setup"
 
-    install "lua51 base-devel"
+    install "lua51 base-devel wget unzip"
 
     wget https://luarocks.org/releases/luarocks-3.12.2.tar.gz
     tar zxpf luarocks-3.12.2.tar.gz
@@ -382,6 +407,8 @@ function setup {
     gdb_setup
     # i3_setup
     # sway_setup
+    hyprland_setup
+    sddm_setup
     vim_setup
     bash_setup
     zsh_setup
