@@ -424,6 +424,7 @@ function setup {
     nvim_setup
     chrome_setup
     font_setup
+    theme_setup
     # rclone_setup
 }
 
