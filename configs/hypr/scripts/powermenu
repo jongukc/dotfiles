@@ -93,13 +93,13 @@ typeset -A menu
 
 # Menu with keys/commands
 menu=(
-  [ Shutdown]="systemctl poweroff"
-  [ Reboot]="systemctl reboot"
-  [ Suspend]="systemctl suspend"
-  [ Hibernate]="systemctl hibernate"
-  [ Lock]="hyprlock"
-  [ Logout]="hyprctl dispatch exit"
-  [ Cancel]=""
+  [  Shutdown]="systemctl poweroff"
+  [  Reboot]="systemctl reboot"
+  [  Suspend]="systemctl suspend"
+  [  Hibernate]="systemctl hibernate"
+  [  Lock]="hyprlock"
+  [  Logout]="hyprctl dispatch exit"
+  [  Cancel]=""
 )
 
 menu_nrows=${#menu[@]}
