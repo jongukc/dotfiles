@@ -237,5 +237,8 @@
         "key": "ctrl+shift+r",
         "command": "workbench.view.remote"
     },
-]
+    {
+        "key": "ctrl+e",
+        "command": "-workbench.action.quickOpen"
+    }
 ]
