@@ -1,0 +1,3 @@
+# ~/.config/zathura/zathurarc
+set synctex true
+set synctex-editor-command "nvim --server /tmp/nvim.pipe --remote-send '<C-\><C-n>:e %{input}<CR>:%{line}<CR>'"

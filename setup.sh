@@ -276,6 +276,14 @@ function evince_setup {
     install evince
 }
 
+function zathura_setup {
+    echo "[*] zathura_setup"
+    install zathura zathura-pdf-mupdf
+
+    mkdir -p "$HOME/.config/zathura"
+    [ -f "$CONFIGS/zathura/zathurarc" ] && cp "$CONFIGS/zathura/zathurarc" "$HOME/.config/zathura/zathurarc"
+}
+
 function fcitx5_setup {
     echo "[*] fcitx5_setup"
     install fcitx5 fcitx5-configtool fcitx5-hangul $(pkg fcitx5-gtk)
@@ -495,6 +503,7 @@ function setup {
     zsh_setup
     tmux_setup
     evince_setup
+    zathura_setup
     fcitx5_setup
     ranger_setup
     xclip_setup
