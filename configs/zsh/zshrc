@@ -116,8 +116,16 @@ source $ZSH/oh-my-zsh.sh
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-source /usr/share/fzf/key-bindings.zsh
-source /usr/share/fzf/completion.zsh
+# fzf integration (path varies by distro)
+for f in /usr/share/fzf/key-bindings.zsh /usr/share/doc/fzf/examples/key-bindings.zsh; do
+    [ -f "$f" ] && source "$f" && break
+done
+for f in /usr/share/fzf/completion.zsh /usr/share/doc/fzf/examples/completion.zsh; do
+    [ -f "$f" ] && source "$f" && break
+done
+
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
 
 alias vim="nvim"
-alias vi="nvim" 
+alias vi="nvim"

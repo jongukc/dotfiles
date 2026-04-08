@@ -4,10 +4,63 @@ set -e
 
 CONFIGS="$PWD/configs"
 
+# Distro detection
+DISTRO=""
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    case "$ID" in
+        arch|endeavouros|cachyos|garuda) DISTRO="arch" ;;
+        ubuntu|debian|linuxmint|pop)     DISTRO="debian" ;;
+        *)
+            echo "Unsupported distro: $ID"
+            exit 1
+            ;;
+    esac
+else
+    echo "Cannot detect distro: /etc/os-release not found"
+    exit 1
+fi
+
+echo "[*] Detected distro family: $DISTRO"
+
+# Package name mapping: arch name -> debian equivalent
+function pkg {
+    local name="$1"
+    if [ "$DISTRO" = "debian" ]; then
+        case "$name" in
+            base-devel)              echo "build-essential" ;;
+            lua51)                   echo "lua5.1 liblua5.1-dev" ;;
+            docker)                  echo "docker.io" ;;
+            visual-studio-code-bin)  echo "code" ;;
+            google-chrome)           echo "google-chrome-stable" ;;
+            ttf-jetbrains-mono-nerd) echo "fonts-jetbrains-mono" ;;
+            noto-fonts-cjk)          echo "fonts-noto-cjk" ;;
+            arc-gtk-theme)           echo "arc-theme" ;;
+            xorg-xwayland)           echo "xwayland" ;;
+            qt5-wayland)             echo "qtwayland5" ;;
+            qt5-graphicaleffects)    echo "qml-module-qtgraphicaleffects" ;;
+            qt5-quickcontrols2)      echo "qml-module-qtquick-controls2" ;;
+            qt5-svg)                 echo "libqt5svg5" ;;
+            hyprpolkitagent)         echo "polkitd" ;;
+            fcitx5-gtk)              echo "fcitx5-frontend-gtk3 fcitx5-frontend-gtk4" ;;
+            npm)                     echo "npm" ;;
+            *)                       echo "$name" ;;
+        esac
+    else
+        echo "$name"
+    fi
+}
+
+# Distro-aware package installer
 function install {
-    for pkg in $1; do
-        yay -Sy --needed --noconfirm $pkg
-    done
+    case "$DISTRO" in
+        arch)
+            yay -Sy --needed --noconfirm "$@"
+            ;;
+        debian)
+            sudo apt install -y "$@"
+            ;;
+    esac
 }
 
 function nosudo {
@@ -18,6 +71,11 @@ function nosudo {
 
 function yay_setup {
     echo "[*] yay_setup"
+
+    if [ "$DISTRO" = "debian" ]; then
+        echo "[+] Skipping yay on Debian-based distro"
+        return
+    fi
 
     sudo pacman -Sy --needed --noconfirm git base-devel
 
@@ -34,57 +92,90 @@ function yay_setup {
     fi
 }
 
+function apt_setup {
+    echo "[*] apt_setup"
+
+    if [ "$DISTRO" != "debian" ]; then
+        echo "[+] Skipping apt_setup on Arch-based distro"
+        return
+    fi
+
+    sudo apt update && sudo apt upgrade -y
+    install $(pkg base-devel) curl wget git software-properties-common
+
+    # VS Code repo
+    if ! apt-cache policy code 2>/dev/null | grep -q "Candidate"; then
+        echo "[+] Adding Microsoft VS Code repository"
+        wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor >packages.microsoft.gpg
+        sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+        echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
+        rm -f packages.microsoft.gpg
+    fi
+
+    # Google Chrome repo
+    if ! apt-cache policy google-chrome-stable 2>/dev/null | grep -q "Candidate"; then
+        echo "[+] Adding Google Chrome repository"
+        wget -qO- https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor | sudo tee /etc/apt/keyrings/google-chrome.gpg >/dev/null
+        echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+    fi
+
+    sudo apt update
+}
+
 function git_setup {
     echo "[*] git_setup"
-    install "git"
+    install git
 
     [ -f "$CONFIGS/git/gitconfig" ] && cp "$CONFIGS/git/gitconfig" "$HOME/.gitconfig"
 }
 
 function gdb_setup {
     echo "[*] gdb_setup"
-    install "gdb"
+    install gdb
 
     mkdir -p "$HOME/.config/gdb"
     [ -f "$CONFIGS/gdb/gdbinit" ] && cp "$CONFIGS/gdb/gdbinit" "$HOME/.config/gdb/gdbinit"
     [ -f "$CONFIGS/gdb/gdbinit-gef.py" ] && cp "$CONFIGS/gdb/gdbinit-gef.py" "$HOME/.gdbinit-gef.py"
 }
 
-# function i3_setup {
-#     echo "[*] i3_setup"
-#
-#     install "xorg xorg-xinit i3-wm i3status i3lock dmenu xterm"
-#     install "rofi"
-#     install "feh"
-#     install "polybar"
-#
-#     mkdir -p "$HOME/.config/i3"
-#     [ -f "$CONFIGS/i3/config" ] && cp "$CONFIGS/i3/config" "$HOME/.config/i3/config"
-#     [ -d "$CONFIGS/i3/scripts" ] && cp -r "$CONFIGS/i3/scripts" "$HOME/.config/i3"
-#
-#     mkdir -p "$HOME/.config/rofi"
-#     cp -r "$CONFIGS/rofi" "$HOME/.config"
-#     cp -r "$CONFIGS/rofi_themes/themes" "$HOME/.local/share/rofi"
-#
-#     mkdir -p "$HOME/.config/polybar"
-#     cp -r "$CONFIGS/polybar" "$HOME/.config"
-#
-#     mkdir -p "$HOME/.screen"
-#     cp screen.sh "$HOME/.screen"
-#     cp bg.png "$HOME/.screen"
-# }
-
 function hyprland_setup {
     echo "[*] hyprland_setup"
 
-    install "hyprland hyprpaper hyprlock hypridle"
-    install "waybar grim slurp wl-clipboard light mako xorg-xwayland"
-    install "xdg-desktop-portal-hyprland hyprpolkitagent"
-    install "qt5-wayland qt6-wayland"
-    install "rofi-wayland"
-    install "foot"
-    install "cpio cmake meson"
+    if [ "$DISTRO" = "debian" ]; then
+        echo "[+] Installing Hyprland build dependencies on Debian..."
+        install meson ninja-build cmake-extras cmake gettext gettext-base \
+            fontconfig libfontconfig-dev libffi-dev libxml2-dev libdrm-dev \
+            libxkbcommon-x11-dev libxkbregistry-dev libxkbcommon-dev libpixman-1-dev \
+            libudev-dev libseat-dev seatd libxcb-dri3-dev libvulkan-dev \
+            libegl-dev libgles2 libegl1-mesa-dev glslang-tools libinput-bin \
+            libinput-dev libxcb-composite0-dev libavutil-dev libavcodec-dev \
+            libavformat-dev libxcb-ewmh2 libxcb-ewmh-dev libxcb-present-dev \
+            libxcb-icccm4-dev libxcb-render-util0-dev libxcb-res0-dev \
+            libxcb-xinput-dev libpango1.0-dev libtomlplusplus-dev \
+            $(pkg xorg-xwayland)
 
+        echo ""
+        echo "========================================================"
+        echo "[!] Hyprland must be built from source on Ubuntu."
+        echo "[!] See: https://wiki.hyprland.org/Getting-Started/Installation/"
+        echo "========================================================"
+        echo ""
+        echo "[!] After installing Hyprland, re-run: ./setup.sh -t hyprland"
+        echo "[!] to deploy configs."
+    else
+        install hyprland hyprpaper hyprlock hypridle
+        install $(pkg xorg-xwayland)
+        install xdg-desktop-portal-hyprland $(pkg hyprpolkitagent)
+        install cpio cmake meson
+    fi
+
+    # Common packages (both distros)
+    install waybar grim slurp wl-clipboard light mako
+    install $(pkg qt5-wayland) $(pkg qt6-wayland)
+    install rofi-wayland
+    install foot
+
+    # Deploy configs (identical for both distros)
     rm -rf "$HOME/.config/hypr"
     rm -rf "$HOME/.config/rofi"
     rm -rf "$HOME/.config/waybar"
@@ -99,18 +190,16 @@ function hyprland_setup {
 
     mkdir -p "$HOME/.screen"
     [ -f "bg.png" ] && cp bg.png "$HOME/.screen"
-
-    # hyprpm update
-    # yes | hyprpm add https://github.com/outfoxxed/hy3
-    # hyprpm reload -n
-    # hyprpm enable hy3
 }
 
 function sddm_setup {
     echo "[*] sddm_setup"
 
-    install "sddm qt5-graphicaleffects qt5-quickcontrols2 qt5-svg"
-    install "sddm-silent-theme"
+    install sddm $(pkg qt5-graphicaleffects) $(pkg qt5-quickcontrols2) $(pkg qt5-svg)
+
+    if [ "$DISTRO" = "arch" ]; then
+        install sddm-silent-theme
+    fi
 
     sudo touch /etc/sddm.conf
     cat <<EOF | sudo tee /etc/sddm.conf >/dev/null
@@ -125,31 +214,9 @@ EOF
     sudo systemctl enable sddm
 }
 
-function sway_setup {
-    echo "[*] sway_setup"
-
-    install "sway swaylock swayidle waybar grim slurp wl-clipboard light mako polkit-gnome xorg-xwayland"
-    install "rofi-wayland"
-
-    mkdir -p "$HOME/.config/sway"
-    [ -f "$CONFIGS/sway/config" ] && cp "$CONFIGS/sway/config" "$HOME/.config/sway/config"
-    [ -d "$CONFIGS/sway/scripts" ] && cp -r "$CONFIGS/sway/scripts" "$HOME/.config/sway"
-    chmod +x "$HOME/.config/sway/scripts/"*
-
-    mkdir -p "$HOME/.config/rofi"
-    cp -r "$CONFIGS/rofi" "$HOME/.config"
-
-    mkdir -p "$HOME/.config/waybar"
-    [ -f "$CONFIGS/waybar/config" ] && cp "$CONFIGS/waybar/config" "$HOME/.config/waybar/config"
-    [ -f "$CONFIGS/waybar/style.css" ] && cp "$CONFIGS/waybar/style.css" "$HOME/.config/waybar/style.css"
-
-    mkdir -p "$HOME/.screen"
-    cp bg.png "$HOME/.screen"
-}
-
 function vim_setup {
     echo "[*] vim_setup"
-    install "vim"
+    install vim
     [ -f "$CONFIGS/vim/vimrc" ] && cp "$CONFIGS/vim/vimrc" "$HOME/.vimrc"
 }
 
@@ -160,7 +227,7 @@ function bash_setup {
 
 function zsh_setup {
     echo "[*] zsh_setup"
-    install "zsh fzf autojump"
+    install zsh fzf $(pkg autojump)
 
     echo "[+] oh-my-zsh setup"
 
@@ -196,7 +263,7 @@ function zsh_setup {
 
 function tmux_setup {
     echo "[*] tmux_setup"
-    install "tmux xclip"
+    install tmux xclip
     [ -f "$CONFIGS/tmux/tmux.conf" ] && cp "$CONFIGS/tmux/tmux.conf" "$HOME/.tmux.conf"
 
     if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
@@ -206,12 +273,12 @@ function tmux_setup {
 
 function evince_setup {
     echo "[*] evince_setup"
-    install "evince"
+    install evince
 }
 
 function fcitx5_setup {
     echo "[*] fcitx5_setup"
-    install "fcitx5 fcitx5-configtool fcitx5-hangul fcitx5-gtk"
+    install fcitx5 fcitx5-configtool fcitx5-hangul $(pkg fcitx5-gtk)
 
     mkdir -p "$HOME/.config"
     [ -d "$CONFIGS/fcitx5" ] && cp -r "$CONFIGS/fcitx5" "$HOME/.config"
@@ -219,7 +286,7 @@ function fcitx5_setup {
 
 function rclone_setup {
     echo "[*] rclone_setup"
-    install "rclone inotify-tools"
+    install rclone inotify-tools
 
     echo "[+] configure rclone, type absolute path to local directory you want to mount:"
     read -r LOCAL_DIR
@@ -261,21 +328,27 @@ EOF
 
 function pyenv_setup {
     echo "[*] pyenv_setup"
-    install "pyenv"
+
+    if [ "$DISTRO" = "debian" ]; then
+        if [ ! -d "$HOME/.pyenv" ]; then
+            curl https://pyenv.run | bash
+        fi
+    else
+        install pyenv
+    fi
 }
 
 function ranger_setup {
     echo "[*] ranger_setup"
-    install "ranger"
+    install ranger
 }
 
 function _docker_setup {
-    install "docker"
+    install $(pkg docker)
 
     sudo systemctl enable --now docker.service
     sudo usermod -aG docker "$USER"
 
-    # Wait for docker socket to be ready
     sleep 3
 
     sudo docker run hello-world
@@ -284,29 +357,15 @@ function _docker_setup {
 function vscode_setup {
     echo "[*] vscode_setup"
 
-    install "visual-studio-code-bin"
+    install $(pkg visual-studio-code-bin)
 
     mkdir -p "$HOME/.config/Code"
     [ -d "$CONFIGS/Code/User" ] && cp -r "$CONFIGS/Code/User" "$HOME/.config/Code"
 }
 
-function emacs_setup {
-    echo "[*] emacs_setup"
-    install "emacs"
-
-    if [ ! -d "$HOME/.emacs.d" ]; then
-        git clone --depth 1 https://github.com/hlissner/doom-emacs "$HOME/.emacs.d"
-        "$HOME/.emacs.d/bin/doom" install
-    fi
-
-    rm -rf "$HOME/.doom.d"
-    [ -d "$CONFIGS/emacs/doom.d" ] && cp -r "$CONFIGS/emacs/doom.d" "$HOME/.doom.d"
-    "$HOME/.emacs.d/bin/doom" sync
-}
-
 function xclip_setup {
     echo "[*] xclip setup"
-    install "xclip"
+    install xclip
 
     echo "[*] setup listening on port 19988"
 
@@ -343,7 +402,7 @@ EOF
 function lua_setup() {
     echo "[*] lua setup"
 
-    install "lua51 base-devel wget unzip"
+    install $(pkg lua51) $(pkg base-devel) wget unzip
 
     wget https://luarocks.org/releases/luarocks-3.12.2.tar.gz
     tar zxpf luarocks-3.12.2.tar.gz
@@ -362,7 +421,7 @@ function nvim_setup() {
     . "$HOME/.cargo/env"
     rustup update stable
 
-    install "npm"
+    install $(pkg npm)
     sudo npm install -g dockerfile-language-server-nodejs
 
     cargo install --git https://github.com/MordechaiHadad/bob.git
@@ -377,20 +436,38 @@ function nvim_setup() {
 function chrome_setup {
     echo "[*] chrome_setup"
 
-    install "google-chrome"
+    install $(pkg google-chrome)
 }
 
 function font_setup {
     echo "[*] font_setup"
 
-    install "ttf-jetbrains-mono-nerd"
-    install "noto-fonts-cjk"
+    install $(pkg ttf-jetbrains-mono-nerd)
+    install $(pkg noto-fonts-cjk)
+
+    if [ "$DISTRO" = "debian" ]; then
+        echo "[+] Installing JetBrainsMono Nerd Font manually..."
+        FONT_DIR="$HOME/.local/share/fonts"
+        mkdir -p "$FONT_DIR"
+        if [ ! -f "$FONT_DIR/JetBrainsMonoNerdFont-Regular.ttf" ]; then
+            wget -q https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz -O /tmp/JetBrainsMono.tar.xz
+            tar xf /tmp/JetBrainsMono.tar.xz -C "$FONT_DIR"
+            rm -f /tmp/JetBrainsMono.tar.xz
+            fc-cache -fv
+        fi
+    fi
 }
 
 function theme_setup {
     echo "[*] theme_setup"
 
-    install "arc-gtk-theme"
+    install $(pkg arc-gtk-theme)
+
+    if [ "$DISTRO" = "debian" ]; then
+        install nwg-look
+    else
+        install nwg-look
+    fi
 
     rm -rf "$HOME/.config/nwg-look"
 
@@ -402,11 +479,15 @@ function setup {
     set -e
 
     nosudo
-    yay_setup
+
+    if [ "$DISTRO" = "arch" ]; then
+        yay_setup
+    else
+        apt_setup
+    fi
+
     git_setup
     gdb_setup
-    # i3_setup
-    # sway_setup
     hyprland_setup
     sddm_setup
     vim_setup
