@@ -20,7 +20,8 @@ require("lazy").setup({
 	-- require("plugins.neotree"),
 	require("plugins.treesitter"),
 	-- require("plugins.palmer"),
-	-- require("plugins.bufferline"),
+	-- require("plugins.pasm"),
+	require("plugins.bufferline"),
 	require("plugins.lualine"),
 	require("plugins.telescope"),
 	require("plugins.lsp"),
@@ -48,3 +49,16 @@ require("lazy").setup({
 
 -- Set colorscheme
 vim.cmd.colorscheme("gruvbox-material")
+
+vim.g.clipboard = {
+	name = "wl-clipboard",
+	copy = {
+		["+"] = "wl-copy",
+		["*"] = "wl-copy",
+	},
+	paste = {
+		["+"] = "wl-paste",
+		["*"] = "wl-paste",
+	},
+	cache_enabled = 1,
+}
