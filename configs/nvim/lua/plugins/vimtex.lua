@@ -10,10 +10,10 @@ return {
 		}
 		vim.g.vimtex_quickfix_mode = 0
 
-		-- Use texremote-forward for remote sessions, zathura directly for local
-		local forward = os.getenv("HOME") .. "/bin/texremote-forward"
+		-- Use paperhere-forward for remote sessions, zathura directly for local
+		local forward = os.getenv("HOME") .. "/bin/paperhere-forward"
 		if vim.fn.filereadable(forward) == 1
-		   and vim.fn.getenv("TEXREMOTE_SESSION") ~= vim.NIL then
+		   and vim.fn.getenv("PAPERHERE_SESSION") ~= vim.NIL then
 			vim.g.vimtex_view_method = "general"
 			vim.g.vimtex_view_general_viewer = forward
 			vim.g.vimtex_view_general_options = "@line:@col:@tex @pdf"
@@ -21,8 +21,8 @@ return {
 			vim.g.vimtex_view_method = "zathura"
 		end
 
-		-- Auto-rebuild on save when TEXREMOTE_BUILD_CMD is set
-		local build_cmd = vim.fn.getenv("TEXREMOTE_BUILD_CMD")
+		-- Auto-rebuild on save when PAPERHERE_BUILD_CMD is set
+		local build_cmd = vim.fn.getenv("PAPERHERE_BUILD_CMD")
 		if build_cmd ~= vim.NIL then
 			vim.api.nvim_create_autocmd("BufWritePost", {
 				pattern = "*.tex",
