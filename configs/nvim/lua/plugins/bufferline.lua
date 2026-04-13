@@ -32,8 +32,8 @@ return {
 				always_show_bufferline = true,
 				show_tab_indicators = false,
 				indicator = {
-					icon = "▎", -- this should be omitted if indicator style is not 'icon'
-					style = "icon", -- Options: 'icon', 'underline', 'none'
+					-- icon = "", -- this should be omitted if indicator style is not 'icon'
+					style = "underline", -- Options: 'icon', 'underline', 'none'
 				},
 				icon_pinned = "󰐃",
 				minimum_padding = 1,
@@ -44,16 +44,28 @@ return {
 			highlights = {
 				separator = {
 					fg = "#434C5E",
+					sp = "#80AA9E",
 				},
 				buffer_selected = {
 					bold = true,
 					italic = false,
+					sp = "#80AA9E",
 				},
 				-- separator_selected = {},
 				-- tab_selected = {},
 				-- background = {},
+				close_button = {
+					sp = "#80AA9E",
+				},
+				close_button_selected = {
+					sp = "#80AA9E",
+				},
+				close_button_visible = {
+					sp = "#80AA9E",
+				},
 				indicator_selected = {
 					fg = "#80AA9E",
+					sp = "#80AA9E",
 				},
 				fill = {
 					bg = "#1D2021",

@@ -53,12 +53,12 @@ vim.cmd.colorscheme("gruvbox-material")
 vim.g.clipboard = {
 	name = "wl-clipboard",
 	copy = {
-		["+"] = "wl-copy",
-		["*"] = "wl-copy",
+		["+"] = { "wl-copy", "--trim-newline" },
+		["*"] = { "wl-copy", "--primary", "--trim-newline" },
 	},
 	paste = {
-		["+"] = "wl-paste",
-		["*"] = "wl-paste",
+		["+"] = { "wl-paste", "--no-newline" },
+		["*"] = { "wl-paste", "--primary", "--no-newline" },
 	},
 	cache_enabled = 1,
 }
