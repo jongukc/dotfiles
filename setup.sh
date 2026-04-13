@@ -351,6 +351,14 @@ function ranger_setup {
     install ranger
 }
 
+function w3m_setup {
+    echo "[*] w3m_setup"
+    install w3m
+
+    rm -rf "$HOME/.w3m"
+    [ -d "$CONFIGS/w3m" ] && cp -r "$CONFIGS/w3m" "$HOME/.w3m"
+}
+
 function _docker_setup {
     install $(pkg docker)
 
@@ -506,6 +514,7 @@ function setup {
     zathura_setup
     fcitx5_setup
     ranger_setup
+    w3m_setup
     xclip_setup
     pyenv_setup
     _docker_setup

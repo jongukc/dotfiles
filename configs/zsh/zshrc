@@ -126,6 +126,9 @@ done
 
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
+export PATH="/home/jonguk/.local/bin:$PATH"
 
 alias vim="nvim"
 alias vi="nvim"
+
+mdview() { pandoc "$1" | w3m -T 'text/html'; }
