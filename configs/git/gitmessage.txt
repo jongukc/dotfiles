@@ -1,5 +1,0 @@
-
-# Subject line (start with capital, keep under 50 characters)
-# 
-# Multi-line description of commit
-# 
