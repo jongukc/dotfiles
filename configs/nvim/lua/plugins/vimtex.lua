@@ -5,15 +5,11 @@ return {
 	init = function()
 		vim.g.vimtex_syntax_enabled = 1
 		vim.g.vimtex_compiler_method = "generic"
-		vim.g.vimtex_compiler_generic = {
-			command = "make -C paper all",
-		}
 		vim.g.vimtex_quickfix_mode = 0
 
 		-- Use paperhere-forward for remote sessions, zathura directly for local
 		local forward = os.getenv("HOME") .. "/bin/paperhere-forward"
-		if vim.fn.filereadable(forward) == 1
-		   and vim.fn.getenv("PAPERHERE_SESSION") ~= vim.NIL then
+		if vim.fn.filereadable(forward) == 1 and vim.fn.getenv("PAPERHERE_SESSION") ~= vim.NIL then
 			vim.g.vimtex_view_method = "general"
 			vim.g.vimtex_view_general_viewer = forward
 			vim.g.vimtex_view_general_options = "@line:@col:@tex @pdf"

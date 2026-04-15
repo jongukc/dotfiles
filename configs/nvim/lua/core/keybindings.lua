@@ -89,3 +89,10 @@ vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagn
 
 -- Exiting terminal mode with esc
 vim.api.nvim_set_keymap("t", "<Esc>", "<C-\\><C-n>", { noremap = true, silent = true })
+
+-- Oil
+vim.keymap.set("n", "<leader>e", "<CMD>Oil<CR>", { desc = "Open Oil" })
+
+-- Quickfix
+vim.keymap.set("n", "<leader>cn", ":cnext<CR>", { desc = "Quickfix: Next" })
+vim.keymap.set("n", "<leader>cp", ":cprev<CR>", { desc = "Quickfix: Previous" })

@@ -45,10 +45,13 @@ require("lazy").setup({
 	require("plugins.themes.modus"),
 	require("plugins.themes.gruvbox-material"),
 	require("plugins.themes.gruber-darker"),
+	require("plugins.themes.catpuccin"),
+	require("plugins.themes.dalbit"),
 })
 
 -- Set colorscheme
-vim.cmd.colorscheme("gruvbox-material")
+-- vim.cmd.colorscheme("gruvbox-material")
+vim.cmd.colorscheme("dalbit")
 
 vim.g.clipboard = {
 	name = "wl-clipboard",
