@@ -1,0 +1,97 @@
+{
+    "$help": "https://aka.ms/terminal-documentation",
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+    "actions": [],
+    "copyFormatting": "none",
+    "copyOnSelect": false,
+    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+    "keybindings":
+    [
+        {
+            "id": "Terminal.CopyToClipboard",
+            "keys": "ctrl+c"
+        },
+        {
+            "id": "Terminal.DuplicatePaneAuto",
+            "keys": "alt+shift+d"
+        }
+    ],
+    "newTabMenu":
+    [
+        {
+            "type": "remainingProfiles"
+        }
+    ],
+    "profiles":
+    {
+        "defaults":
+        {
+            "colorScheme": "dalbit"
+        },
+        "list":
+        [
+            {
+                "colorScheme": "dalbit",
+                "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                "font":
+                {
+                    "face": "JetBrainsMono Nerd Font"
+                },
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "hidden": false,
+                "name": "Windows PowerShell"
+            },
+            {
+                "commandline": "%SystemRoot%\\System32\\cmd.exe",
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "hidden": false,
+                "name": "명령 프롬프트"
+            },
+            {
+                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+                "hidden": false,
+                "name": "Azure Cloud Shell",
+                "source": "Windows.Terminal.Azure"
+            },
+            {
+                "guid": "{2ece5bfe-50ed-5f3a-ab87-5cd4baafed2b}",
+                "hidden": false,
+                "name": "Git Bash",
+                "source": "Git"
+            },
+            {
+                "guid": "{ae371f90-44bd-567d-af10-c5155411cc2d}",
+                "hidden": false,
+                "name": "Ubuntu",
+                "source": "Microsoft.WSL"
+            }
+        ]
+    },
+    "schemes":
+    [
+        {
+            "name": "dalbit",
+            "background": "#151515",
+            "foreground": "#ced0d6",
+            "cursorColor": "#74bc42",
+            "selectionBackground": "#2c2c2c",
+            "black":         "#151515",
+            "red":           "#e04a2a",
+            "green":         "#569828",
+            "yellow":        "#d9a82e",
+            "blue":          "#7eb0cc",
+            "purple":        "#d07878",
+            "cyan":          "#4fa8a0",
+            "white":         "#b8bac0",
+            "brightBlack":   "#474747",
+            "brightRed":     "#ff6a42",
+            "brightGreen":   "#74bc42",
+            "brightYellow":  "#edc14a",
+            "brightBlue":    "#8cc0de",
+            "brightPurple":  "#de8a88",
+            "brightCyan":    "#70c8bc",
+            "brightWhite":   "#ced0d6"
+        }
+    ],
+    "themes": []
+}
