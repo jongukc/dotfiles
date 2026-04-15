@@ -29,8 +29,8 @@
         "separate-outputs": true
     },
     "pulseaudio": {
-        "format": "<span color='#7DAEA3'>VOL</span> {volume}%",
-        "format-muted": "<span color='#707880'>muted</span>",
+        "format": "<span color='#7eb0cc'>VOL</span> {volume}%",
+        "format-muted": "<span color='#66686e'>muted</span>",
         "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
         "on-scroll-up": "wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+",
         "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
@@ -38,7 +38,7 @@
     "disk": {
         "path": "/",
         "interval": 30,
-        "format": "<span color='#7DAEA3'>STO</span> {percentage_used}%"
+        "format": "<span color='#7eb0cc'>STO</span> {percentage_used}%"
     },
     "battery": {
         "bat": "BAT1",
@@ -52,23 +52,23 @@
             "on-discharging-critical": "notify-send -u critical 'Very Low Battery'",
             "on-charging-100": "notify-send -u normal 'Battery Full!'"
         },
-        "format": "<span color='#7DAEA3'>BAT</span> {capacity}%"
+        "format": "<span color='#7eb0cc'>BAT</span> {capacity}%"
     },
     "hyprland/language": {
-        "format": "<span color='#7DAEA3'>{}</span>",
+        "format": "<span color='#7eb0cc'>{}</span>",
         "format-en": "EN",
         "format-ko": "KR"
     },
     "cpu": {
         "interval": 10,
-        "format": "<span color='#7DAEA3'>CPU</span> {usage}%"
+        "format": "<span color='#7eb0cc'>CPU</span> {usage}%"
     },
     "memory": {
         "interval": 30,
-        "format": "<span color='#7DAEA3'>RAM</span> {percentage}%"
+        "format": "<span color='#7eb0cc'>RAM</span> {percentage}%"
     },
     "clock": {
-        "format": "<span color='#7DAEA3'>{:%H:%M}</span>",
+        "format": "<span color='#7eb0cc'>{:%H:%M}</span>",
         "format-alt": "{:%Y-%m-%d %H:%M:%S}",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
     },
@@ -76,15 +76,15 @@
         "spacing": 10
     },
     "network": {
-        "format-wifi": "<span color='#7DAEA3'> </span>",
-        "format-ethernet": "<span color='#7DAEA3'> </span>",
-        "format-linked": "<span color='#7DAEA3'> </span> (No IP)",
-        "format-disconnected": "<span color='#EA6962'>⚠ </span> Disconnected",
+        "format-wifi": "<span color='#7eb0cc'> </span>",
+        "format-ethernet": "<span color='#7eb0cc'> </span>",
+        "format-linked": "<span color='#7eb0cc'> </span> (No IP)",
+        "format-disconnected": "<span color='#e04a2a'>⚠ </span> Disconnected",
         "format-alt": "{ifname}: {ipaddr}/{cidr}",
         "tooltip-format": "{ifname} via {gwaddr}"
     }
     //"hyprland/language": {
-    //    "format": "<span color='#7DAEA3'> </span> {}",
+    //    "format": "<span color='#7eb0cc'> </span> {}",
     //    "format-en": "EN",
     //    "format-ko": "KR"
     //} 

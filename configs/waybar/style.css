@@ -25,7 +25,7 @@ window#waybar.hidden {
 #workspaces button {
     padding: 0 5px;
     background-color: transparent;
-    color: #C5C8C6;
+    color: #b8bac0;
 }
 
 #workspaces button:hover {
@@ -36,13 +36,13 @@ window#waybar.hidden {
 
 /* CHANGED: Hyprland uses .active instead of .focused */
 #workspaces button.active {
-    background-color: #373B41;
-    color: #7DAEA3;
-    border-bottom: 3px solid #7DAEA3;
+    background-color: #383838;
+    color: #7eb0cc;
+    border-bottom: 3px solid #7eb0cc;
 }
 
 #workspaces button.urgent {
-    background-color: #EA6962;
+    background-color: #e04a2a;
 }
 
 #clock,
@@ -60,17 +60,17 @@ window#waybar.hidden {
 #idle_inhibitor,
 #mpd {
     padding: 0 10px;
-    color: #C5C8C6;
+    color: #b8bac0;
 }
 
 #window {
     border-style: solid;
     border-width: 0;
-    color: #C5C8C6;
+    color: #b8bac0;
 }
 
 /* CHANGED: Renamed from #sway-language to #language */
 #language {
-    color: #7DAEA3;
+    color: #7eb0cc;
     padding: 0 5px;
 }
