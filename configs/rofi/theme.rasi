@@ -1,141 +1,184 @@
-/*******************************************************
- * ROFI configs i3 Apps menu for EndeavourOS
- * Maintainer: joekamprad [joekamprad //a_t// endeavouros.com]
- *******************************************************/
-configuration {
-    font:                "JetBrainsMono NF 12";
-    show-icons:          false;
-    icon-theme:          "Qogir";
-    display-drun:        "Apps";
-    drun-display-format: "{name}";
-    scroll-method:       0;
-    disable-history:     false;
-    sidebar-mode:        false;
-    kb-remove-char-back: "";
-    kb-remove-to-eol:       "";
-    kb-mode-complete:    "";
-    kb-accept-entry:    "Control+m,Return,KP_Enter";
-    kb-row-up:          "Control+k";
-    kb-row-down:        "Control+j";
-    kb-row-left:        "Control+h";
-    kb-row-right:       "Control+l";
+* {
+    /* Dalbit (달빛) Palette */
+    bg0:     #151515;
+    bg1:     #1c1c1c;
+    bg2:     #2c2c2c;
+    bg3:     #383838;
+    fg0:     #ced0d6;
+    fg1:     #b8bac0;
+    red:     #e04a2a;
+    orange:  #bc6838;
+    yellow:  #e6b422;
+    teal:    #4fa8a0;
+    grey:    #66686e;
+
+    /* Semantic Mappings */
+    background:                  @bg0;
+    foreground:                  @fg0;
+
+    normal-background:           @bg0;
+    normal-foreground:           @fg0;
+    alternate-normal-background: @bg0;
+    alternate-normal-foreground: @fg0;
+
+    selected-normal-background:  @bg3;
+    selected-normal-foreground:  @fg0;
+
+    active-background:           @bg1;
+    active-foreground:           @teal;
+    alternate-active-background: @active-background;
+    alternate-active-foreground: @active-foreground;
+    selected-active-background:  @teal;
+    selected-active-foreground:  @bg0;
+
+    urgent-background:           @bg1;
+    urgent-foreground:           @red;
+    alternate-urgent-background: @urgent-background;
+    alternate-urgent-foreground: @urgent-foreground;
+    selected-urgent-background:  @red;
+    selected-urgent-foreground:  @bg0;
+
+    separatorcolor:              @background;
+    border-color:                @grey;
+    spacing:                     2;
+    background-color:            transparent;
 }
-@import "~/.config/rofi/config.rasi"
-/* Insert theme modifications after this */
-@theme "~/.config/rofi/theme.rasi"
 
 window {
     background-color: @background;
-    border:           0;
-    padding:          30;
+    border:           2px;
+    border-color:     @border-color;
+    padding:          10px;
+    border-radius:    10px;
 }
-listview {
-    lines:   10;
-    columns: 3;
-}
+
 mainbox {
     border:  0;
     padding: 0;
 }
+
 message {
     border:       2px 0px 0px;
     border-color: @separatorcolor;
     padding:      1px;
 }
+
 textbox {
     text-color: @foreground;
 }
+
 listview {
     fixed-height: 0;
-    border:       8px 0px 0px;
+    border:       2px 0px 0px;
     border-color: @separatorcolor;
-    spacing:      8px;
-    scrollbar:    false;
+    spacing:      2px;
+    scrollbar:    true;
     padding:      2px 0px 0px;
 }
+
 element {
     border:  0;
-    padding: 1px;
+    padding: 3px;
+    border-radius: 4px;
 }
+
 element-text {
     background-color: inherit;
     text-color:       inherit;
 }
+
 element.normal.normal {
     background-color: @normal-background;
     text-color:       @normal-foreground;
 }
+
 element.normal.urgent {
     background-color: @urgent-background;
     text-color:       @urgent-foreground;
 }
+
 element.normal.active {
     background-color: @active-background;
     text-color:       @active-foreground;
 }
+
 element.selected.normal {
     background-color: @selected-normal-background;
     text-color:       @selected-normal-foreground;
 }
+
 element.selected.urgent {
     background-color: @selected-urgent-background;
     text-color:       @selected-urgent-foreground;
 }
+
 element.selected.active {
     background-color: @selected-active-background;
     text-color:       @selected-active-foreground;
 }
+
 element.alternate.normal {
     background-color: @alternate-normal-background;
     text-color:       @alternate-normal-foreground;
 }
+
 element.alternate.urgent {
     background-color: @alternate-urgent-background;
     text-color:       @alternate-urgent-foreground;
 }
+
 element.alternate.active {
     background-color: @alternate-active-background;
     text-color:       @alternate-active-foreground;
 }
+
 scrollbar {
     width:        4px;
     border:       0;
-    handle-color: @normal-foreground;
+    handle-color: @bg3;
     handle-width: 8px;
     padding:      0;
 }
+
 mode-switcher {
     border:       2px 0px 0px;
     border-color: @separatorcolor;
 }
+
 button {
     spacing:    0;
     text-color: @normal-foreground;
 }
+
 button.selected {
     background-color: @selected-normal-background;
     text-color:       @selected-normal-foreground;
 }
+
 inputbar {
     spacing:    0;
     text-color: @normal-foreground;
     padding:    1px;
+    children:   [ prompt, textbox-prompt-colon, entry, case-indicator ];
 }
+
 case-indicator {
     spacing:    0;
     text-color: @normal-foreground;
 }
+
 entry {
     spacing:    0;
     text-color: @normal-foreground;
+    placeholder: "Search...";
+    placeholder-color: @grey;
 }
+
 prompt {
     spacing:    0;
-    text-color: @normal-foreground;
+    text-color: @yellow;
 }
-inputbar {
-    children:   [ prompt,textbox-prompt-colon,entry,case-indicator ];
-}
+
 textbox-prompt-colon {
     expand:     false;
     str:        ":";

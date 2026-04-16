@@ -13,6 +13,7 @@ configuration {
 
 @import "~/.config/rofi/config.rasi"
 /* Insert theme modifications after this */
+@theme "~/.config/rofi/theme.rasi"
 
 window {
     background-color: @background;

@@ -43,32 +43,32 @@ return {
 			},
 			highlights = {
 				separator = {
-					fg = "#434C5E",
-					sp = "#80AA9E",
+					fg = "#383838",
+					sp = "#5ca825",
 				},
 				buffer_selected = {
 					bold = true,
 					italic = false,
-					sp = "#80AA9E",
+					sp = "#5ca825",
 				},
 				-- separator_selected = {},
 				-- tab_selected = {},
 				-- background = {},
 				close_button = {
-					sp = "#80AA9E",
+					sp = "#5ca825",
 				},
 				close_button_selected = {
-					sp = "#80AA9E",
+					sp = "#5ca825",
 				},
 				close_button_visible = {
-					sp = "#80AA9E",
+					sp = "#5ca825",
 				},
 				indicator_selected = {
-					fg = "#80AA9E",
-					sp = "#80AA9E",
+					fg = "#5ca825",
+					sp = "#5ca825",
 				},
 				fill = {
-					bg = "#1D2021",
+					bg = "#151515",
 				},
 			},
 		})
