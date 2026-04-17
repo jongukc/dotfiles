@@ -43,3 +43,4 @@ vim.opt.formatoptions:remove({ "c", "r", "o" }) -- Don't insert the current comm
 vim.opt.runtimepath:remove("/usr/share/vim/vimfiles") -- Separate Vim plugins from Neovim in case Vim still in use (default: includes this path if Vim is installed)
 vim.opt.colorcolumn = "80" -- Column ruler
 vim.o.clipboard = "unnamedplus"
+vim.o.guicursor = ""
