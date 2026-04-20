@@ -78,7 +78,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git autojump zsh-autosuggestions fzf vi-mode)
+plugins=(git zoxide zsh-autosuggestions fzf vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -116,19 +116,40 @@ source $ZSH/oh-my-zsh.sh
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# fzf integration (path varies by distro)
-for f in /usr/share/fzf/key-bindings.zsh /usr/share/doc/fzf/examples/key-bindings.zsh; do
-    [ -f "$f" ] && source "$f" && break
-done
-for f in /usr/share/fzf/completion.zsh /usr/share/doc/fzf/examples/completion.zsh; do
-    [ -f "$f" ] && source "$f" && break
-done
+source /usr/share/doc/fzf/examples/key-bindings.zsh
 
-[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
-export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
+. "$HOME/.cargo/env"                                                            
 export PATH="/home/jonguk/.local/bin:$PATH"
+export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
+
+export BROWSER='/usr/bin/google-chrome-stable'
+export EDITOR="nvim"
 
 alias vim="nvim"
-alias vi="nvim"
+#alias icat="kitty +kitten icat"
 
-mdview() { pandoc "$1" | w3m -T 'text/html'; }
+mdview()
+{
+  local browser=0
+  local input=""
+  for arg in "$@"; do
+    if [[ "$arg" == "-b" ]]; then
+      browser=1
+    else
+      input="$arg"
+    fi
+  done
+
+  if (( browser )); then
+    local output="${input%.md}.html"
+    pandoc "$input" -s --embed-resources --css /usr/share/mdview/style.css -o "$output"
+    firefox "$output" &>/dev/null &!
+  else
+    pandoc "$input" | w3m -T 'text/html'
+  fi
+}
+
+# opam configuration
+[[ ! -r /home/jonguk/.opam/opam-init/init.zsh ]] || source /home/jonguk/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
+export PATH="$HOME/.npm-global/bin:$PATH"
+

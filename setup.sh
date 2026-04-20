@@ -474,6 +474,12 @@ function font_setup {
     fi
 }
 
+function mdview_setup {
+    echo "[*] mdview_setup"
+
+    [ -d "$CONFIGS/mdview" ] && sudo cp -r "$CONFIGS/mdview" /usr/share/
+}
+
 function theme_setup {
     echo "[*] theme_setup"
 
@@ -524,6 +530,7 @@ function setup {
     chrome_setup
     font_setup
     theme_setup
+    mdview_setup
     # rclone_setup
 }
 
