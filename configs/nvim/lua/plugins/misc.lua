@@ -19,12 +19,13 @@ return {
 	{
 		-- Hints keybinds
 		"folke/which-key.nvim",
+		event = "VeryLazy",
+		opts = {},
 	},
 	{
 		-- Autoclose parentheses, brackets, quotes, etc.
 		"windwp/nvim-autopairs",
 		event = "InsertEnter",
-		config = true,
 		opts = {},
 	},
 	{

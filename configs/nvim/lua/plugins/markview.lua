@@ -11,13 +11,8 @@ return {
 				wrap = true,
 			},
 		})
-		vim.api.nvim_set_keymap(
-			"n",
-			"<leader>m",
-			"<CMD>Markview<CR>",
-			{ desc = "Toggles `markview` previews globally." }
-		)
-		vim.api.nvim_set_keymap(
+		vim.keymap.set("n", "<leader>m", "<CMD>Markview<CR>", { desc = "Toggles `markview` previews globally." })
+		vim.keymap.set(
 			"n",
 			"<leader>ms",
 			"<CMD>Markview splitToggle<CR>",

@@ -16,11 +16,13 @@ return {
 			topdelete = { text = "‾" },
 			changedelete = { text = "~" },
 		},
+		on_attach = function(bufnr)
+			local gs = require("gitsigns")
+			local function map(mode, lhs, rhs, desc)
+				vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
+			end
+			map("n", "<leader>hp", gs.preview_hunk, "Preview git hunk")
+			map("n", "<leader>hb", gs.blame_line, "Blame line")
+		end,
 	},
-	config = function()
-		local opts = { noremap = true, silent = true }
-		local gitsigns = require("gitsigns")
-		vim.keymap.set("n", "<leader>hp", gitsigns.preview_hunk, { desc = "Preview git hunk" })
-		vim.keymap.set("n", "<leader>hb", gitsigns.blame_line, { desc = "Blame line" })
-	end,
 }

@@ -4,7 +4,6 @@ return {
 	-- tag = "v2.15", -- uncomment to pin to a specific release
 	init = function()
 		vim.g.vimtex_syntax_enabled = 1
-		vim.g.vimtex_compiler_method = "generic"
 		vim.g.vimtex_quickfix_mode = 0
 
 		-- Use paperhere-forward for remote sessions, zathura directly for local
@@ -14,7 +13,7 @@ return {
 			vim.g.vimtex_view_general_viewer = forward
 			vim.g.vimtex_view_general_options = "@line:@col:@tex @pdf"
 		else
-			vim.g.vimtex_view_method = "zathura"
+			vim.g.vimtex_view_method = "zathura_simple"
 		end
 
 		-- Auto-rebuild on save when PAPERHERE_BUILD_CMD is set

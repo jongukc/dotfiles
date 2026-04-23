@@ -3,6 +3,6 @@ return {
 	dependencies = { "nvim-treesitter/nvim-treesitter" },
 	build = ":TSUpdate",
 	config = function()
-		require("nvim-treesitter.install").ensure_installed_sync({ "pasm" })
+		require("nvim-treesitter").install({ "pasm" })
 	end,
 }
