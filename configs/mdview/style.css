@@ -167,11 +167,11 @@ code span.ss { color: #44464c; font-style: italic; } /* SpecialString */
 code span.sc { color: #44464c; }                     /* SpecialChar */
 
 /* comments, docs, annotations — fg_mute, italic */
-code span.co { color: #80828a; font-style: italic; } /* Comment */
-code span.cv { color: #80828a; font-style: italic; } /* CommentVar */
-code span.do { color: #80828a; font-style: italic; } /* Documentation */
-code span.an { color: #80828a; font-style: italic; } /* Annotation */
-code span.in { color: #80828a; font-style: italic; } /* Information */
+code span.co { color: #5e606a; font-style: italic; } /* Comment */
+code span.cv { color: #5e606a; font-style: italic; } /* CommentVar */
+code span.do { color: #5e606a; font-style: italic; } /* Documentation */
+code span.an { color: #5e606a; font-style: italic; } /* Annotation */
+code span.in { color: #5e606a; font-style: italic; } /* Information */
 code span.re { color: #5a5c64; }                     /* RegionMarker */
 
 /* the one accent — warm red, reserved for diagnostics */
