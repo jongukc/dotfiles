@@ -5,9 +5,24 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-alias ls='ls --color=auto'
-alias grep='grep --color=auto'
+if [[ "$(uname -s)" == "Darwin" ]]; then
+    if [[ "$(uname -m)" == "arm64" ]]; then
+        [[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [[ -x /usr/local/bin/brew ]]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
+
+    export BROWSER='open'
+    alias ls='ls -G'
+    command -v ggrep >/dev/null 2>&1 && alias grep='ggrep --color=auto'
+else
+    export BROWSER='/usr/bin/google-chrome-stable'
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+fi
+
 PS1='[\u@\h \W]\$ '
 
-[[ -s /home/jonguk/.autojump/etc/profile.d/autojump.sh ]] && source /home/jonguk/.autojump/etc/profile.d/autojump.sh
-export BROWSER='/usr/bin/google-chrome-stable'
+[[ -s "$HOME/.autojump/etc/profile.d/autojump.sh" ]] && source "$HOME/.autojump/etc/profile.d/autojump.sh"
+[[ -s /opt/homebrew/etc/profile.d/autojump.sh ]] && source /opt/homebrew/etc/profile.d/autojump.sh
+[[ -s /usr/local/etc/profile.d/autojump.sh ]] && source /usr/local/etc/profile.d/autojump.sh

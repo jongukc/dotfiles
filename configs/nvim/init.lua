@@ -59,15 +59,30 @@ require("lazy").setup({
 -- vim.cmd.colorscheme("gruvbox-material")
 vim.cmd.colorscheme("dalbit")
 
-vim.g.clipboard = {
-	name = "wl-clipboard",
-	copy = {
-		["+"] = { "wl-copy" },
-		["*"] = { "wl-copy", "--primary" },
-	},
-	paste = {
-		["+"] = { "wl-paste", "--no-newline" },
-		["*"] = { "wl-paste", "--primary", "--no-newline" },
-	},
-	cache_enabled = 1,
-}
+if vim.fn.executable("pbcopy") == 1 and vim.fn.executable("pbpaste") == 1 then
+	vim.g.clipboard = {
+		name = "macOS-clipboard",
+		copy = {
+			["+"] = { "pbcopy" },
+			["*"] = { "pbcopy" },
+		},
+		paste = {
+			["+"] = { "pbpaste" },
+			["*"] = { "pbpaste" },
+		},
+		cache_enabled = 0,
+	}
+elseif vim.fn.executable("wl-copy") == 1 and vim.fn.executable("wl-paste") == 1 then
+	vim.g.clipboard = {
+		name = "wl-clipboard",
+		copy = {
+			["+"] = { "wl-copy" },
+			["*"] = { "wl-copy", "--primary" },
+		},
+		paste = {
+			["+"] = { "wl-paste", "--no-newline" },
+			["*"] = { "wl-paste", "--primary", "--no-newline" },
+		},
+		cache_enabled = 1,
+	}
+end

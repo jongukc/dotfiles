@@ -1,8 +1,343 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 set -e
 
-CONFIGS="$PWD/configs"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIGS="$ROOT/configs"
+
+OS="$(uname -s)"
+
+if [ "$OS" = "Darwin" ]; then
+    HOMEBREW_PREFIX="/usr/local"
+    if [ "$(uname -m)" = "arm64" ]; then
+        HOMEBREW_PREFIX="/opt/homebrew"
+    fi
+    HOMEBREW_BIN="$HOMEBREW_PREFIX/bin/brew"
+    BREW_READY=0
+
+    function ensure_line {
+        local line="$1"
+        local file="$2"
+
+        touch "$file"
+        if ! grep -Fqx "$line" "$file"; then
+            printf '\n%s\n' "$line" >>"$file"
+        fi
+    }
+
+    function brew_setup {
+        if [ "$BREW_READY" = "1" ]; then
+            return
+        fi
+
+        echo "[*] brew_setup"
+
+        if [ ! -x "$HOMEBREW_BIN" ]; then
+            if command -v brew >/dev/null 2>&1; then
+                local current_prefix
+                current_prefix="$(brew --prefix 2>/dev/null || true)"
+                if [ -n "$current_prefix" ] && [ "$current_prefix" != "$HOMEBREW_PREFIX" ]; then
+                    echo "[!] Ignoring migrated Homebrew at $current_prefix"
+                    echo "[!] Apple Silicon Homebrew must live at $HOMEBREW_PREFIX"
+                fi
+            fi
+
+            echo "[+] Installing Homebrew at $HOMEBREW_PREFIX"
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        fi
+
+        if [ ! -x "$HOMEBREW_BIN" ]; then
+            echo "Error: expected Homebrew at $HOMEBREW_BIN"
+            exit 1
+        fi
+
+        eval "$("$HOMEBREW_BIN" shellenv)"
+        ensure_line "eval \"\$($HOMEBREW_BIN shellenv)\"" "$HOME/.zprofile"
+        ensure_line "eval \"\$($HOMEBREW_BIN shellenv)\"" "$HOME/.bash_profile"
+        ensure_line "eval \"\$($HOMEBREW_BIN shellenv)\"" "$HOME/.profile"
+        brew update
+        BREW_READY=1
+    }
+
+    function brew_install {
+        brew_setup
+
+        local package
+        for package in "$@"; do
+            if ! brew list --formula "$package" >/dev/null 2>&1; then
+                brew install "$package"
+            fi
+        done
+    }
+
+    function cask_present {
+        local package="$1"
+
+        case "$package" in
+            visual-studio-code)
+                [ -d "/Applications/Visual Studio Code.app" ]
+                ;;
+            docker)
+                [ -d "/Applications/Docker.app" ]
+                ;;
+            google-chrome)
+                [ -d "/Applications/Google Chrome.app" ]
+                ;;
+            font-jetbrains-mono-nerd-font)
+                compgen -G "$HOME/Library/Fonts/JetBrainsMono*NerdFont*.ttf" >/dev/null
+                ;;
+            font-noto-sans-cjk)
+                [ -f "$HOME/Library/Fonts/NotoSansCJK.ttc" ] || [ -f "/Library/Fonts/NotoSansCJK.ttc" ]
+                ;;
+            *)
+                return 1
+                ;;
+        esac
+    }
+
+    function brew_install_cask {
+        brew_setup
+
+        local package
+        for package in "$@"; do
+            if ! brew list --cask "$package" >/dev/null 2>&1; then
+                if ! brew install --cask --adopt "$package"; then
+                    if cask_present "$package"; then
+                        echo "[!] $package appears to be installed outside Homebrew; continuing"
+                    else
+                        return 1
+                    fi
+                fi
+            fi
+        done
+    }
+
+    function git_setup {
+        echo "[*] git_setup"
+        brew_install git
+
+        [ -f "$CONFIGS/git/gitconfig" ] && cp "$CONFIGS/git/gitconfig" "$HOME/.gitconfig"
+        [ -f "$CONFIGS/git/gitmessage.txt" ] && cp "$CONFIGS/git/gitmessage.txt" "$HOME/.gitmessage.txt"
+    }
+
+    function gdb_setup {
+        echo "[*] gdb_setup"
+        brew_install gdb
+
+        mkdir -p "$HOME/.config/gdb"
+        [ -f "$CONFIGS/gdb/gdbinit" ] && cp "$CONFIGS/gdb/gdbinit" "$HOME/.config/gdb/gdbinit"
+        [ -f "$CONFIGS/gdb/gdbinit" ] && cp "$CONFIGS/gdb/gdbinit" "$HOME/.gdbinit"
+        [ -f "$CONFIGS/gdb/gdbinit-gef.py" ] && cp "$CONFIGS/gdb/gdbinit-gef.py" "$HOME/.gdbinit-gef.py"
+
+        echo "[!] macOS requires code signing before gdb can debug local processes."
+    }
+
+    function vim_setup {
+        echo "[*] vim_setup"
+        brew_install vim
+
+        [ -f "$CONFIGS/vim/vimrc" ] && cp "$CONFIGS/vim/vimrc" "$HOME/.vimrc"
+    }
+
+    function zsh_setup {
+        echo "[*] zsh_setup"
+        brew_install zsh fzf zoxide autojump fd
+
+        echo "[+] oh-my-zsh setup"
+        if [ ! -d "$HOME/.oh-my-zsh" ]; then
+            if [ -f "$CONFIGS/zsh/ohmyzsh.sh" ]; then
+                sh "$CONFIGS/zsh/ohmyzsh.sh" --unattended
+            else
+                sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+            fi
+        fi
+
+        echo "[+] installing plugins/themes"
+        if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
+            git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+        fi
+
+        if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
+            git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+        fi
+
+        [ -f "$CONFIGS/zsh/zshrc" ] && cp "$CONFIGS/zsh/zshrc" "$HOME/.zshrc"
+        [ -f "$CONFIGS/zsh/p10k.zsh" ] && cp "$CONFIGS/zsh/p10k.zsh" "$HOME/.p10k.zsh"
+
+        touch "$HOME/.envvars"
+        if ! grep -q "FZF_CONFIGS_COMMAND" "$HOME/.envvars"; then
+            echo "export FZF_CONFIGS_COMMAND='fd -type f'" >>"$HOME/.envvars"
+        fi
+
+        local zsh_bin
+        zsh_bin="$(command -v zsh)"
+        if [ -n "$zsh_bin" ] && [ "$SHELL" != "$zsh_bin" ]; then
+            if ! grep -Fqx "$zsh_bin" /etc/shells; then
+                echo "[+] Adding $zsh_bin to /etc/shells"
+                echo "$zsh_bin" | sudo tee -a /etc/shells >/dev/null
+            fi
+            echo "[+] Changing default shell to zsh"
+            chsh -s "$zsh_bin"
+        fi
+    }
+
+    function tmux_setup {
+        echo "[*] tmux_setup"
+        brew_install tmux
+
+        [ -f "$CONFIGS/tmux/tmux.conf" ] && cp "$CONFIGS/tmux/tmux.conf" "$HOME/.tmux.conf"
+        mkdir -p "$HOME/.config/tmux"
+        [ -f "$CONFIGS/tmux/tmux.conf" ] && cp "$CONFIGS/tmux/tmux.conf" "$HOME/.config/tmux/tmux.conf"
+
+        if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+            git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+        fi
+    }
+
+    function pyenv_setup {
+        echo "[*] pyenv_setup"
+        brew_install pyenv openssl readline sqlite xz zlib tcl-tk
+    }
+
+    function ranger_setup {
+        echo "[*] ranger_setup"
+        brew_install ranger
+    }
+
+    function w3m_setup {
+        echo "[*] w3m_setup"
+        brew_install w3m
+
+        rm -rf "$HOME/.w3m"
+        [ -d "$CONFIGS/w3m" ] && cp -r "$CONFIGS/w3m" "$HOME/.w3m"
+    }
+
+    function vscode_setup {
+        echo "[*] vscode_setup"
+        brew_install_cask visual-studio-code
+
+        local code_user="$HOME/Library/Application Support/Code/User"
+        mkdir -p "$code_user"
+        [ -d "$CONFIGS/Code/User" ] && cp "$CONFIGS/Code/User/"* "$code_user/"
+    }
+
+    function lua_setup {
+        echo "[*] lua_setup"
+        brew_install lua luarocks
+    }
+
+    function nvim_setup {
+        echo "[*] nvim_setup"
+        brew_install neovim ripgrep fd node wget unzip cmake ninja
+
+        rm -rf "$HOME/.config/nvim"
+        mkdir -p "$HOME/.config"
+        [ -d "$CONFIGS/nvim" ] && cp -r "$CONFIGS/nvim" "$HOME/.config/nvim"
+    }
+
+    function chrome_setup {
+        echo "[*] chrome_setup"
+        brew_install_cask google-chrome
+    }
+
+    function font_setup {
+        echo "[*] font_setup"
+        brew_install_cask font-jetbrains-mono-nerd-font font-noto-sans-cjk
+    }
+
+    function mdview_setup {
+        echo "[*] mdview_setup"
+        brew_install pandoc w3m
+
+        mkdir -p "$HOME/.local/share"
+        [ -d "$CONFIGS/mdview" ] && cp -r "$CONFIGS/mdview" "$HOME/.local/share/"
+    }
+
+    function rclone_setup {
+        echo "[*] rclone_setup"
+        brew_install rclone
+        echo "[!] Configure launchd syncing manually if you need automatic macOS rclone sync."
+    }
+
+    function _docker_setup {
+        echo "[*] docker_setup"
+        brew_install_cask docker
+        echo "[!] Start Docker.app once from Applications to finish setup."
+    }
+
+    function macos_skip {
+        echo "[+] Skipping $1 on macOS"
+    }
+
+    function bash_setup {
+        echo "[*] bash_setup"
+        brew_install bash
+
+        [ -f "$CONFIGS/bash/bashrc" ] && cp "$CONFIGS/bash/bashrc" "$HOME/.bashrc"
+        ensure_line '[[ -f "$HOME/.bashrc" ]] && source "$HOME/.bashrc"' "$HOME/.bash_profile"
+    }
+
+    function nosudo { macos_skip nosudo; }
+    function yay_setup { macos_skip yay; }
+    function apt_setup { macos_skip apt; }
+    function hyprland_setup { macos_skip hyprland; }
+    function sddm_setup { macos_skip sddm; }
+    function evince_setup { macos_skip evince; }
+    function zathura_setup { macos_skip zathura; }
+    function fcitx5_setup { macos_skip fcitx5; }
+    function xclip_setup { macos_skip xclip; }
+    function theme_setup { macos_skip theme; }
+
+    function setup {
+        set -e
+
+        brew_setup
+        git_setup
+        gdb_setup
+        vim_setup
+        bash_setup
+        zsh_setup
+        tmux_setup
+        pyenv_setup
+        ranger_setup
+        w3m_setup
+        vscode_setup
+        _docker_setup
+        lua_setup
+        nvim_setup
+        chrome_setup
+        font_setup
+        mdview_setup
+    }
+
+    TARGET="all"
+    while getopts "t:" opt; do
+        case $opt in
+        t)
+            TARGET=$OPTARG
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2
+            exit 1
+            ;;
+        esac
+    done
+
+    if [ "$TARGET" == "all" ]; then
+        setup
+    else
+        if declare -f "${TARGET}_setup" >/dev/null; then
+            "${TARGET}_setup"
+        elif declare -f "${TARGET}" >/dev/null; then
+            "${TARGET}"
+        else
+            echo "Error: Function ${TARGET}_setup or ${TARGET} not found"
+            exit 1
+        fi
+    fi
+
+    exit 0
+fi
 
 # Distro detection
 DISTRO=""
@@ -189,7 +524,7 @@ function hyprland_setup {
     cp -r "$CONFIGS/mako" "$HOME/.config/"
 
     mkdir -p "$HOME/.screen"
-    [ -f "bg.png" ] && cp bg.png "$HOME/.screen"
+    [ -f "$ROOT/bg.png" ] && cp "$ROOT/bg.png" "$HOME/.screen"
 }
 
 function sddm_setup {

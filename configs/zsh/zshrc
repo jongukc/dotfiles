@@ -14,6 +14,14 @@ fi
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
+if [[ "$(uname -s)" == "Darwin" ]]; then
+  if [[ "$(uname -m)" == "arm64" ]]; then
+    [[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [[ -x /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  fi
+fi
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -113,16 +121,23 @@ source $ZSH/oh-my-zsh.sh
 
 [[ ! -f $HOME/.envvars ]] || source $HOME/.envvars
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+if [[ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ]]; then
+  source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
+elif [[ -f /usr/local/opt/fzf/shell/key-bindings.zsh ]]; then
+  source /usr/local/opt/fzf/shell/key-bindings.zsh
+elif [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
+  source /usr/share/doc/fzf/examples/key-bindings.zsh
+fi
 
-source /usr/share/doc/fzf/examples/key-bindings.zsh
-
-. "$HOME/.cargo/env"                                                            
-export PATH="/home/jonguk/.local/bin:$PATH"
+[[ ! -f "$HOME/.cargo/env" ]] || source "$HOME/.cargo/env"
+export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
 
-export BROWSER='/usr/bin/google-chrome-stable'
+if [[ "$(uname -s)" == "Darwin" ]]; then
+  export BROWSER='open'
+else
+  export BROWSER='/usr/bin/google-chrome-stable'
+fi
 export EDITOR="nvim"
 
 alias vim="nvim"
@@ -142,14 +157,21 @@ mdview()
 
   if (( browser )); then
     local output="${input%.md}.html"
-    pandoc "$input" -s --embed-resources --css /usr/share/mdview/style.css -o "$output"
-    firefox "$output" &>/dev/null &!
+    local css="$HOME/.local/share/mdview/style.css"
+    [[ -f /usr/share/mdview/style.css ]] && css="/usr/share/mdview/style.css"
+    pandoc "$input" -s --embed-resources --css "$css" -o "$output"
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+      open "$output" &>/dev/null &!
+    else
+      xdg-open "$output" &>/dev/null &!
+    fi
   else
     pandoc "$input" | w3m -T 'text/html'
   fi
 }
 
 # opam configuration
-[[ ! -r /home/jonguk/.opam/opam-init/init.zsh ]] || source /home/jonguk/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
+[[ ! -r "$HOME/.opam/opam-init/init.zsh" ]] || source "$HOME/.opam/opam-init/init.zsh"  > /dev/null 2> /dev/null
 export PATH="$HOME/.npm-global/bin:$PATH"
 
+command -v pyenv >/dev/null 2>&1 && eval "$(pyenv init - zsh)"
