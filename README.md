@@ -33,11 +33,11 @@ Linux-only desktop/session services.
 
 ## Components
 
-- **macOS**: Homebrew, git, GDB, bash, zsh, oh-my-zsh, tmux, Vim, Neovim, VS Code, pyenv, ranger, w3m, Lua, Docker Desktop, Chrome, fonts, mdview assets
+- **macOS**: Homebrew, git, GDB, bash, zsh, oh-my-zsh, tmux, Vim, Neovim, VS Code, pyenv, ranger, w3m, Lua, Docker Desktop, Chrome, iTerm2 (dalbit colorscheme), fonts, mdview assets
 - **Linux WM**: Hyprland (waybar, rofi-wayland, mako, foot, hyprlock, hypridle)
 - **Shell**: zsh (oh-my-zsh, powerlevel10k, fzf, autojump)
 - **Editor**: Neovim, Vim, VS Code
-- **Terminal**: foot, tmux
+- **Terminal**: foot (Linux), iTerm2 + dalbit colorscheme (macOS), tmux
 - **Input**: fcitx5 (Hangul)
 - **Dev**: git, gdb, pyenv, lua, docker, ranger
 - **Other**: evince, rclone, Chrome, SDDM

@@ -84,6 +84,9 @@ if [ "$OS" = "Darwin" ]; then
             google-chrome)
                 [ -d "/Applications/Google Chrome.app" ]
                 ;;
+            iterm2)
+                [ -d "/Applications/iTerm.app" ]
+                ;;
             font-jetbrains-mono-nerd-font)
                 compgen -G "$HOME/Library/Fonts/JetBrainsMono*NerdFont*.ttf" >/dev/null
                 ;;
@@ -246,6 +249,24 @@ if [ "$OS" = "Darwin" ]; then
         brew_install_cask font-jetbrains-mono-nerd-font font-noto-sans-cjk
     }
 
+    function iterm2_setup {
+        echo "[*] iterm2_setup"
+        brew_install_cask iterm2
+
+        # Deploy the dalbit colorscheme as an auto-loaded Dynamic Profile.
+        # iTerm2 watches this folder and picks the profile up live; it inherits
+        # font/keybindings/behaviour from the Default profile and overrides only
+        # the colors. The Guid below must match "Guid" in dalbit.json.
+        local dynamic_profiles="$HOME/Library/Application Support/iTerm2/DynamicProfiles"
+        if [ -f "$CONFIGS/iterm2/dalbit.json" ]; then
+            mkdir -p "$dynamic_profiles"
+            cp "$CONFIGS/iterm2/dalbit.json" "$dynamic_profiles/dalbit.json"
+            defaults write com.googlecode.iterm2 "Default Bookmark Guid" -string "dalbit-dotfiles"
+            echo "[!] dalbit set as the default iTerm2 profile; restart iTerm2 to apply."
+            echo "[!] Standalone preset: configs/iterm2/dalbit.itermcolors (double-click to import)."
+        fi
+    }
+
     function mdview_setup {
         echo "[*] mdview_setup"
         brew_install pandoc w3m
@@ -308,6 +329,7 @@ if [ "$OS" = "Darwin" ]; then
         nvim_setup
         chrome_setup
         font_setup
+        iterm2_setup
         mdview_setup
     }
 
