@@ -14,6 +14,7 @@ if [ "$OS" = "Darwin" ]; then
     fi
     HOMEBREW_BIN="$HOMEBREW_PREFIX/bin/brew"
     BREW_READY=0
+    export HOMEBREW_NO_ASK=1
 
     function ensure_line {
         local line="$1"
@@ -65,7 +66,7 @@ if [ "$OS" = "Darwin" ]; then
         local package
         for package in "$@"; do
             if ! brew list --formula "$package" >/dev/null 2>&1; then
-                brew install "$package"
+                brew install --yes "$package"
             fi
         done
     }
@@ -101,7 +102,7 @@ if [ "$OS" = "Darwin" ]; then
         local package
         for package in "$@"; do
             if ! brew list --cask "$package" >/dev/null 2>&1; then
-                if ! brew install --cask --adopt "$package"; then
+                if ! brew install --cask --adopt --yes "$package"; then
                     if cask_present "$package"; then
                         echo "[!] $package appears to be installed outside Homebrew; continuing"
                     else
