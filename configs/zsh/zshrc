@@ -175,3 +175,9 @@ mdview()
 export PATH="$HOME/.npm-global/bin:$PATH"
 
 command -v pyenv >/dev/null 2>&1 && eval "$(pyenv init - zsh)"
+
+# Use Enlish UTF-8 locale for command-line tools
+unset LANGUAGE
+unset LC_ALL
+unset LC_COLLATE LC_CTYPE LC_MESSAGES LC_MONETARY LC_NUMERIC LC_TIME
+export LANG=en_US.UTF-8
