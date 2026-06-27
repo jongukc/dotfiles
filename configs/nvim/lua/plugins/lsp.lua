@@ -85,6 +85,14 @@ return {
 						vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
 					end, "[T]oggle Inlay [H]ints")
 				end
+
+				-- Keep `gq` driven by textwidth (not the LSP formatter) for prose filetypes.
+				local ft = vim.bo[event.buf].filetype
+				if ft == "tex" or ft == "plaintex" then
+					vim.bo[event.buf].formatexpr = "v:lua.TexFormatExpr()"
+				elseif ft == "markdown" or ft == "text" then
+					vim.bo[event.buf].formatexpr = ""
+				end
 			end,
 		})
 
