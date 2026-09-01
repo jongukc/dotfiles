@@ -4,6 +4,9 @@ set -e
 
 CONFIGS="$PWD/configs"
 
+# Base directories that config deployment relies on (may be missing on a clean machine)
+mkdir -p "$HOME/.config" "$HOME/.local/share" "$HOME/.local/bin"
+
 # Distro detection
 DISTRO=""
 if [ -f /etc/os-release ]; then
@@ -176,6 +179,7 @@ function hyprland_setup {
     install foot
 
     # Deploy configs (identical for both distros)
+    mkdir -p "$HOME/.config"
     rm -rf "$HOME/.config/hypr"
     rm -rf "$HOME/.config/rofi"
     rm -rf "$HOME/.config/waybar"
@@ -264,7 +268,12 @@ function zsh_setup {
 function tmux_setup {
     echo "[*] tmux_setup"
     install tmux xclip
-    [ -f "$CONFIGS/tmux/tmux.conf" ] && cp "$CONFIGS/tmux/tmux.conf" "$HOME/.tmux.conf"
+
+    # tmux sources every config it finds, so drop the legacy ~/.tmux.conf
+    rm -f "$HOME/.tmux.conf"
+
+    mkdir -p "$HOME/.config/tmux"
+    [ -f "$CONFIGS/tmux/tmux.conf" ] && cp "$CONFIGS/tmux/tmux.conf" "$HOME/.config/tmux/tmux.conf"
 
     if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
         git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
@@ -440,11 +449,23 @@ function nvim_setup() {
     install $(pkg npm)
     sudo npm install -g dockerfile-language-server-nodejs
 
+    # nvim-treesitter (main branch) shells out to the tree-sitter CLI to build parsers
+    sudo npm install -g tree-sitter-cli
+
+    # Mason installs Python-based servers (basedpyright, ruff) into a venv;
+    # Ubuntu ships python3 without ensurepip, so venv creation fails without these
+    if [ "$DISTRO" = "debian" ]; then
+        install python3-venv python3-pip python3-dev
+    else
+        install python python-pip
+    fi
+
     cargo install --git https://github.com/MordechaiHadad/bob.git
 
     "$HOME/.cargo/bin/bob" install stable
     "$HOME/.cargo/bin/bob" use stable
 
+    mkdir -p "$HOME/.config"
     rm -rf "$HOME/.config/nvim"
     [ -d "$CONFIGS/nvim" ] && cp -r "$CONFIGS/nvim" "$HOME/.config/nvim"
 }
@@ -491,6 +512,7 @@ function theme_setup {
         install nwg-look
     fi
 
+    mkdir -p "$HOME/.config"
     rm -rf "$HOME/.config/nwg-look"
 
     cp -r "$CONFIGS/nwg-look" "$HOME/.config/"
