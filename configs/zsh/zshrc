@@ -149,6 +149,16 @@ mdview()
   fi
 }
 
+ph()
+{
+  paperhere open \
+    --tex paper/p.tex \
+    --pdf paper/p.pdf \
+    --build-cmd 'make -C paper' \
+    --browser firefox \
+    .
+}
+
 # opam configuration
 [[ ! -r /home/jonguk/.opam/opam-init/init.zsh ]] || source /home/jonguk/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
 export PATH="$HOME/.npm-global/bin:$PATH"
