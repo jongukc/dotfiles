@@ -16,6 +16,7 @@ return {
 			topdelete = { text = "‾" },
 			changedelete = { text = "~" },
 		},
+		current_line_blame = true,
 		on_attach = function(bufnr)
 			local gs = require("gitsigns")
 			local function map(mode, lhs, rhs, desc)
