@@ -151,13 +151,13 @@ mdview()
 
 ph()
 {
-  local path="$@"
+  local target="$@"
   paperhere open \
     --tex paper/p.tex \
     --pdf paper/p.pdf \
     --build-cmd 'make -C paper' \
     --browser firefox \
-    "$path"
+    "$target"
 }
 
 # opam configuration
