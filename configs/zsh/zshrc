@@ -164,3 +164,16 @@ ph()
 [[ ! -r /home/jonguk/.opam/opam-init/init.zsh ]] || source /home/jonguk/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
 export PATH="$HOME/.npm-global/bin:$PATH"
 
+
+if [[ -z $WAYLAND_DISPLAY && -n $XDG_RUNTIME_DIR ]]; then
+  _wl_env=$(systemctl --user show-environment 2>/dev/null)
+  _wl_sock=$(printf '%s\n' "$_wl_env" | sed -n 's/^WAYLAND_DISPLAY=//p')
+  if [[ -n $_wl_sock && -S $XDG_RUNTIME_DIR/$_wl_sock ]]; then
+    export WAYLAND_DISPLAY=$_wl_sock
+    if [[ -z $HYPRLAND_INSTANCE_SIGNATURE ]]; then
+      _wl_sig=$(printf '%s\n' "$_wl_env" | sed -n 's/^HYPRLAND_INSTANCE_SIGNATURE=//p')
+      [[ -n $_wl_sig ]] && export HYPRLAND_INSTANCE_SIGNATURE=$_wl_sig
+    fi
+  fi
+  unset _wl_env _wl_sock _wl_sig
+fi

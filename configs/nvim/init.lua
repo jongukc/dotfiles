@@ -59,15 +59,48 @@ require("lazy").setup({
 -- vim.cmd.colorscheme("gruvbox-material")
 vim.cmd.colorscheme("dalbit")
 
+local osc52 = require("vim.ui.clipboard.osc52")
+local last = {}
+
+local function wayland_live()
+	local sock, dir = vim.env.WAYLAND_DISPLAY, vim.env.XDG_RUNTIME_DIR
+	if not sock or sock == "" or not dir then
+		return false
+	end
+	return vim.uv.fs_stat(dir .. "/" .. sock) ~= nil
+end
+
+local function copier(reg, cmd)
+	local emit = osc52.copy(reg)
+	return function(lines, regtype)
+		emit(lines, regtype)
+		last[reg] = { lines, regtype }
+		if wayland_live() and vim.fn.executable(cmd[1]) == 1 then
+			vim.system(cmd, { stdin = table.concat(lines, "\n") })
+		end
+	end
+end
+
+local function paster(reg, cmd)
+	return function()
+		if wayland_live() and vim.fn.executable(cmd[1]) == 1 then
+			local r = vim.system(cmd, { text = true }):wait()
+			if r.code == 0 then
+				return vim.split(r.stdout or "", "\n")
+			end
+		end
+		return last[reg] or {}
+	end
+end
+
 vim.g.clipboard = {
-	name = "wl-clipboard",
+	name = "osc52+wl-clipboard",
 	copy = {
-		["+"] = { "wl-copy" },
-		["*"] = { "wl-copy", "--primary" },
+		["+"] = copier("+", { "wl-copy" }),
+		["*"] = copier("*", { "wl-copy", "--primary" }),
 	},
 	paste = {
-		["+"] = { "wl-paste", "--no-newline" },
-		["*"] = { "wl-paste", "--primary", "--no-newline" },
+		["+"] = paster("+", { "wl-paste", "--no-newline" }),
+		["*"] = paster("*", { "wl-paste", "--primary", "--no-newline" }),
 	},
-	cache_enabled = 1,
 }

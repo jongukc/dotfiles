@@ -275,6 +275,11 @@ function tmux_setup {
     mkdir -p "$HOME/.config/tmux"
     [ -f "$CONFIGS/tmux/tmux.conf" ] && cp "$CONFIGS/tmux/tmux.conf" "$HOME/.config/tmux/tmux.conf"
 
+    if [ -f "$CONFIGS/tmux/reseed-wayland.sh" ]; then
+        cp "$CONFIGS/tmux/reseed-wayland.sh" "$HOME/.config/tmux/reseed-wayland.sh"
+        chmod +x "$HOME/.config/tmux/reseed-wayland.sh"
+    fi
+
     if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
         git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
     fi
