@@ -1,2 +1,2 @@
-add-auto-load-safe-path /home/chickpiz/.gdbinit
-source /home/chickpiz/.gdbinit-gef.py
+add-auto-load-safe-path ~/.gdbinit
+source ~/.gdbinit-gef.py

@@ -1,7 +1,6 @@
 {
     "workbench.colorTheme": "Gruvbox Material Dark",
     "workbench.iconTheme": "file-icons",
-    "clangd.path": "/home/jonguk/.config/Code/User/globalStorage/llvm-vs-code-extensions.vscode-clangd/install/20.1.0/clangd_20.1.0/bin/clangd",
     "workbench.secondarySideBar.defaultVisibility": "hidden",
     "extensions.ignoreRecommendations": true,
     "editor.inlayHints.enabled": "on",
