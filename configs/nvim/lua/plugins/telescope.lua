@@ -59,8 +59,10 @@ return {
 			},
 			pickers = {
 				find_files = {
-					file_ignore_patterns = { "node_modules", "%.git", "%.venv" },
+					-- every file, also the ones .gitignore lists; not those inside .git
+					file_ignore_patterns = { "node_modules", "%.git/", "%.venv" },
 					hidden = true,
+					no_ignore = true,
 				},
 				live_grep = {
 					file_ignore_patterns = { "node_modules", "%.git", "%.venv" },
