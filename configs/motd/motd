@@ -1,0 +1,207 @@
+#!/bin/bash
+# Per-user login status, printed from ~/.zshrc on SSH logins. ~/.hushlogin hides
+# the system MOTD for this account only, so other users keep theirs.
+# Each host gets its own art in its accent color (same as host_accent in p10k.zsh).
+
+art=() name=() accent=10
+case $(hostname -s) in
+parsley)
+    accent=10 # parsley green
+    mapfile -t art <<'EOF'
+           _/\_
+        _ /    \ _
+       \ V /\/\ V /
+  _/\_  \  \  /  /  _/\_
+_/    \_ \_ || _/ _/    \_
+\ V/\V /   \||/   \ V/\V /
+ \_\/_/_____||_____\_\/_/
+            ||
+            ||
+EOF
+    mapfile -t name <<'EOF'
+                    _
+ _ __  __ _ _ _ ___| |___ _  _
+| '_ \/ _` | '_(_-<| / -_) || |
+| .__/\__,_|_| /__/|_\___|\_, |
+|_|                       |__/
+EOF
+    ;;
+thyme)
+    accent=143 # olive thyme leaves
+    mapfile -t art <<'EOF'
+   o o      o o      o o
+   o\o      o|o      o/o
+    o\o     o|o     o/o
+     o\o    o|o    o/o
+      o\o   o|o   o/o
+        \   o|o   /
+         \___|___/
+             |
+             |
+EOF
+    mapfile -t name <<'EOF'
+ _   _
+| |_| |_ _  _ _ __  ___
+|  _| ' \ || | '  \/ -_)
+ \__|_||_\_, |_|_|_\___|
+         |__/
+EOF
+    ;;
+sivir)
+    accent=208 # Shurima desert orange; Sivir's crossblade
+    mapfile -t art <<'EOF'
+  __                 __
+  \ `.             .' /
+   `. `.         .' .'
+     `. `.     .' .'
+       `.=(  O  )=.'
+     .' .'     `. `.
+   .' .'         `. `.
+  / .'             `. \
+  `'                 `'
+EOF
+    mapfile -t name <<'EOF'
+    _     _
+ __(_)_ _(_)_ _
+(_-< \ V / | '_|
+/__/_|\_/|_|_|
+EOF
+    ;;
+mundo)
+    accent=135 # purple skin; Mundo's bonesaw
+    mapfile -t art <<'EOF'
+ ________________
+|  ()            |
+|                |
+|                |__________
+|                |_o_____o__)
+|                |
+|                |
+|/\/\/\/\/\/\/\/\|
+EOF
+    mapfile -t name <<'EOF'
+                   _
+ _ __ _  _ _ _  __| |___
+| '  \ || | ' \/ _` / _ \
+|_|_|_\_,_|_||_\__,_\___/
+EOF
+    ;;
+ashe)
+    accent=117 # frost blue; Ashe's bow, arrow nocked
+    mapfile -t art <<'EOF'
+          /`.
+         /   `.
+        /      \
+       /        \
+      <>>--------|---->
+       \        /
+        \      /
+         \   .'
+          \.'
+EOF
+    mapfile -t name <<'EOF'
+         _
+ __ _ __| |_  ___
+/ _` (_-< ' \/ -_)
+\__,_/__/_||_\___|
+EOF
+    ;;
+kayle)
+    accent=221 # holy gold; Kayle's sword with wings
+    mapfile -t art <<'EOF'
+              /\
+  __.        |  |        .__
+  \  `-._    |  |    _.-'  /
+   \_    `-. |  | .-'    _/
+     `-._   `|  |'   _.-'
+   .-.___`-.=+==+=.-'___.-.
+    `-.__  .-|  |-.  __.-'
+         `'  |  |  `'
+             (__)
+EOF
+    mapfile -t name <<'EOF'
+ _             _
+| |____ _ _  _| |___
+| / / _` | || | / -_)
+|_\_\__,_|\_, |_\___|
+          |__/
+EOF
+    ;;
+*)
+    name=("$(hostname -s)")
+    ;;
+esac
+
+B=$'\e[1m' D=$'\e[2m' C=$'\e[38;5;'$accent'm' Y=$'\e[33m' R=$'\e[31m' N=$'\e[0m'
+
+# color a percentage: yellow >= 80, red >= 90
+pct_color() { if (( $1 >= 90 )); then printf %s "$R"; elif (( $1 >= 80 )); then printf %s "$Y"; fi; }
+
+. /etc/os-release 2>/dev/null
+side=("" "" "${name[@]/#/$B}" "" "${PRETTY_NAME:-Linux}  $D·$N  $(uname -r)")
+
+# art column is as wide as the widest art line, plus a gap
+width=0
+for line in "${art[@]}"; do (( ${#line} > width )) && width=${#line}; done
+(( width += 4 ))
+
+rows=$(( ${#art[@]} > ${#side[@]} ? ${#art[@]} : ${#side[@]} ))
+for (( i = 0; i < rows; i++ )); do
+    if [ -n "${side[i]}" ]; then
+        printf '%s%-*s%s%s%s\n' "$C" "$width" "${art[i]}" "$N" "${side[i]}" "$N"
+    else
+        printf '%s%s%s\n' "$C" "${art[i]}" "$N"
+    fi
+done
+echo
+
+read -r up _ < /proc/uptime
+up=${up%.*}
+d=$((up / 86400)) h=$((up % 86400 / 3600)) m=$((up % 3600 / 60))
+if (( d > 0 )); then uptime="${d}d ${h}h"; else uptime="${h}h ${m}m"; fi
+read -r l1 l5 l15 _ < /proc/loadavg
+
+mem=$(awk '/^MemTotal:/ {t=$2} /^MemAvailable:/ {a=$2}
+           END {printf "%d %.1fG / %.0fG", (t-a)*100/t, (t-a)/1048576, t/1048576}' /proc/meminfo)
+mem_pct=${mem%% *} mem=${mem#* }
+
+read -r du ds dp < <(df -h --output=used,size,pcent / | tail -1)
+disk_pct=${dp%\%}
+
+printf "  ${D}uptime${N}   %-16s ${D}load${N}  %s %s %s\n" "$uptime" "$l1" "$l5" "$l15"
+printf "  ${D}memory${N}   $(pct_color "$mem_pct")%-16s${N} ${D}disk${N}  $(pct_color "$disk_pct")%s / %s (%s)${N}\n" "$mem" "$du" "$ds" "$dp"
+
+if command -v nvidia-smi >/dev/null; then
+    timeout 2 nvidia-smi --query-gpu=name,utilization.gpu,memory.used,memory.total,temperature.gpu \
+        --format=csv,noheader,nounits 2>/dev/null |
+    awk -F', ' -v D="$D" -v N="$N" '{
+        name = $1; sub(/^NVIDIA /, "", name); s = "  " D "·" N "  "
+        printf "  %sgpu%s      %s%s%s%%%s%.1fG / %.0fG%s%s°C\n", D, N, name, s, $2, s, $3/1024, $4/1024, s, $5
+    }'
+fi
+
+# Pending updates and reboot-required: the same sources Ubuntu's MOTD reads
+# (90-updates-available, 98-reboot-required), minus the ESM notices.
+# update-notifier's apt hook keeps this cache fresh; reading it avoids running apt-check per login
+stamp=/var/lib/update-notifier/updates-available
+if [ -r "$stamp" ]; then
+    total=$(grep -oP '^\d+(?= updates? can be applied immediately)' "$stamp")
+    sec=$(grep -oP '^\d+(?= of these updates? (is a|are) standard security)' "$stamp")
+    if [ -n "$total" ] && (( total > 0 )); then
+        printf "  ${D}updates${N}  %s pending%s\n" "$total" "${sec:+ ($Y$sec security$N)}"
+    fi
+fi
+
+reboot=0 pkgs=()
+if [ -f /var/run/reboot-required ]; then
+    reboot=1
+    [ -r /var/run/reboot-required.pkgs ] && mapfile -t pkgs < <(sort -u /var/run/reboot-required.pkgs)
+elif [ -f /etc/arch-release ] && [ ! -d "/usr/lib/modules/$(uname -r)" ]; then
+    reboot=1 pkgs=(kernel) # Arch: the running kernel's modules were replaced by an upgrade
+fi
+if (( reboot )); then
+    list=$(IFS=,; echo "${pkgs[*]:0:3}")
+    list=${list//,/, }
+    (( ${#pkgs[@]} > 3 )) && list+=" +$(( ${#pkgs[@]} - 3 )) more"
+    printf "  ${D}reboot${N}   ${Y}required${N}%s\n" "${list:+  $D($list)$N}"
+fi

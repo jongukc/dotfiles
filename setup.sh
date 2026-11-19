@@ -300,6 +300,7 @@ if [ "$OS" = "Darwin" ]; then
     }
 
     function nosudo { macos_skip nosudo; }
+    function motd_setup { macos_skip motd; }
     function yay_setup { macos_skip yay; }
     function apt_setup { macos_skip apt; }
     function hyprland_setup { macos_skip hyprland; }
@@ -623,6 +624,18 @@ function zsh_setup {
     sudo chsh -s "$(which zsh)" "$USER"
 }
 
+function motd_setup {
+    echo "[*] motd_setup"
+
+    # ~/.hushlogin hides the system MOTD for this account only; ~/.zshrc prints
+    # ours on SSH logins instead
+    touch "$HOME/.hushlogin"
+    if [ -f "$CONFIGS/motd/motd" ]; then
+        cp "$CONFIGS/motd/motd" "$HOME/.local/bin/motd"
+        chmod +x "$HOME/.local/bin/motd"
+    fi
+}
+
 function tmux_setup {
     echo "[*] tmux_setup"
     install tmux xclip
@@ -900,6 +913,7 @@ function setup {
     vim_setup
     bash_setup
     zsh_setup
+    motd_setup
     tmux_setup
     evince_setup
     zathura_setup
