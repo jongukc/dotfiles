@@ -52,14 +52,27 @@
   typeset -g COLOR_RULER_FOREGROUND=0
   typeset -g COLOR_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND=0
 
+  # Per-host accent for the prompt char ($) and current directory, so machines
+  # are easy to tell apart. League of Legends hosts use the champion's iconic
+  # color; herb hosts use the plant's color. Anything else stays green.
+  local host_accent
+  case ${HOST%%.*} in
+    sivir) host_accent=208 ;;  # Shurima desert orange
+    kayle) host_accent=221 ;;  # holy gold
+    mundo) host_accent=135 ;;  # purple skin
+    ashe)  host_accent=117 ;;  # frost blue
+    thyme) host_accent=143 ;;  # olive thyme leaves (same as its motd sprig)
+    *)     host_accent=10  ;;  # parsley green
+  esac
+
   # Prompt character.
-  typeset -g COLOR_PROMPT_CHAR_OK_FOREGROUND=10
+  typeset -g COLOR_PROMPT_CHAR_OK_FOREGROUND=$host_accent
   typeset -g COLOR_PROMPT_CHAR_ERROR_FOREGROUND=1
 
   # Current directory.
-  typeset -g COLOR_DIR_FOREGROUND=10
-  typeset -g COLOR_DIR_SHORTENED_FOREGROUND=10
-  typeset -g COLOR_DIR_ANCHOR_FOREGROUND=10
+  typeset -g COLOR_DIR_FOREGROUND=$host_accent
+  typeset -g COLOR_DIR_SHORTENED_FOREGROUND=$host_accent
+  typeset -g COLOR_DIR_ANCHOR_FOREGROUND=$host_accent
 
   # VCS (fallback for non-git / vcs_info path).
   typeset -g COLOR_VCS_VISUAL_IDENTIFIER=2
