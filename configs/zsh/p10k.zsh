@@ -931,12 +931,13 @@
   typeset -g POWERLEVEL9K_CONTEXT_FOREGROUND=$COLOR_CONTEXT_FOREGROUND
 
 
+  # Hostnames use the per-host accent (host_accent, see the palette above).
   # Context format when running with privileges: bold user@hostname.
-  typeset -g POWERLEVEL9K_CONTEXT_ROOT_TEMPLATE='%B%n@%m'
+  typeset -g POWERLEVEL9K_CONTEXT_ROOT_TEMPLATE="%B%n@%F{$host_accent}%m"
   # Context format when in SSH without privileges: user@hostname.
-  typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_TEMPLATE='[%n@%m]'
+  typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_TEMPLATE="[%n@%F{$host_accent}%m%F{$COLOR_CONTEXT_REMOTE_FOREGROUND}]"
   # Default context format (no privileges, no SSH): user@hostname.
-  typeset -g POWERLEVEL9K_CONTEXT_TEMPLATE='[%n@%m]'
+  typeset -g POWERLEVEL9K_CONTEXT_TEMPLATE="[%n@%F{$host_accent}%m%F{$COLOR_CONTEXT_FOREGROUND}]"
 
   # Don't show context unless running with privileges or in SSH.
   # Tip: Remove the next line to always show context.
