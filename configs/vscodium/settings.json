@@ -1,5 +1,6 @@
 {
     "window.customMenuBarAltFocus": false,
+    "window.enableMenuBarMnemonics": false,
     "window.menuBarVisibility": "compact",
     "editor.lineNumbers": "relative",
     "editor.fontSize": 18,
