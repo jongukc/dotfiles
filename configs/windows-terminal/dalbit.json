@@ -1,0 +1,27 @@
+{
+    "schemes": [
+        {
+            "name": "Dalbit",
+            "background": "#151515",
+            "foreground": "#ced0d6",
+            "cursorColor": "#74bc42",
+            "selectionBackground": "#2c2c2c",
+            "black": "#151515",
+            "brightBlack": "#474747",
+            "red": "#e04a2a",
+            "brightRed": "#ff6a42",
+            "green": "#569828",
+            "brightGreen": "#74bc42",
+            "yellow": "#d9a82e",
+            "brightYellow": "#edc14a",
+            "blue": "#7eb0cc",
+            "brightBlue": "#8cc0de",
+            "purple": "#d07878",
+            "brightPurple": "#de8a88",
+            "cyan": "#4fa8a0",
+            "brightCyan": "#70c8bc",
+            "white": "#b8bac0",
+            "brightWhite": "#ced0d6"
+        }
+    ]
+}

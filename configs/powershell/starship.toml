@@ -1,0 +1,59 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+add_newline = true
+format = '$username$hostname$directory$git_branch$git_status$time$status$cmd_duration$python$jobs$line_break$character'
+command_timeout = 1000
+
+[username]
+show_always = true
+format = '[\[$user](fg:#ced0d6)'
+style_root = 'bold red'
+
+[hostname]
+ssh_only = false
+format = '[@$hostname\]](fg:#ced0d6) '
+
+[directory]
+style = 'bold green'
+truncation_length = 3
+truncate_to_repo = false
+format = '[$path]($style) '
+
+[git_branch]
+symbol = ''
+style = 'fg:#7eb0cc'
+format = '[$branch]($style) '
+
+[git_status]
+style = 'fg:#d9a82e'
+format = '([$all_status$ahead_behind]($style) )'
+conflicted = '~${count}'
+ahead = '↑${count}'
+behind = '↓${count}'
+staged = '+${count}'
+modified = '!${count}'
+untracked = '?${count}'
+
+[time]
+disabled = false
+time_format = '%H:%M:%S'
+format = '[$time](fg:#b8bac0) '
+
+[status]
+disabled = false
+format = '[exit $status](fg:#e04a2a) '
+
+[cmd_duration]
+min_time = 3000
+format = '[$duration](fg:#d9a82e) '
+
+[python]
+format = '[(\($virtualenv\))](fg:#4fa8a0) '
+
+[jobs]
+symbol = '≡'
+format = '[$symbol$number](fg:#e04a2a) '
+
+[character]
+success_symbol = '[❯](bold green)'
+error_symbol = '[❯](bold red)'
+vimcmd_symbol = '[❮](bold green)'

@@ -7,6 +7,9 @@ CONFIGS="$ROOT/configs"
 
 OS="$(uname -s)"
 
+# Native Windows entry point: ./setup.ps1 (PowerShell), not this Unix installer.
+source "$ROOT/scripts/vscodium.sh"
+
 if [ "$OS" = "Darwin" ]; then
     HOMEBREW_PREFIX="/usr/local"
     if [ "$(uname -m)" = "arm64" ]; then
@@ -77,6 +80,9 @@ if [ "$OS" = "Darwin" ]; then
         case "$package" in
             visual-studio-code)
                 [ -d "/Applications/Visual Studio Code.app" ]
+                ;;
+            vscodium)
+                [ -d "/Applications/VSCodium.app" ]
                 ;;
             docker)
                 [ -d "/Applications/Docker.app" ]
@@ -325,6 +331,7 @@ if [ "$OS" = "Darwin" ]; then
         ranger_setup
         w3m_setup
         vscode_setup
+        vscodium_setup
         _docker_setup
         lua_setup
         nvim_setup
@@ -924,6 +931,7 @@ function setup {
     pyenv_setup
     _docker_setup
     vscode_setup
+    vscodium_setup
     lua_setup
     nvim_setup
     chrome_setup
