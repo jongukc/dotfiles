@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Snapshot/deploy the portable VSCodium config without copying private state."""
+"""Snapshot VSCodium or deploy the portable editor config without copying private state."""
 import argparse
 import datetime
 import json
@@ -16,6 +16,7 @@ import platform
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 CONFIG = ROOT / 'configs/vscodium'
+VSCODE_CONFIG = ROOT / 'configs/Code/User'
 MACHINE_KEYS = ('clangd.path', 'shellformat.path', 'lazygit-vscode.lazygitPath',
                 'terminal.integrated.profiles.windows', 'terminal.integrated.defaultProfile.windows',
                 'terminal.integrated.env.windows')
@@ -28,10 +29,15 @@ def load_jsonc(path):
                   lambda m: m[0] if m[0].startswith('"') else m[1], text)
     return json.loads(text)
 
-def user_directory():
-    if sys.platform == 'win32': return pathlib.Path(os.environ['APPDATA']) / 'VSCodium/User'
-    if sys.platform == 'darwin': return pathlib.Path.home() / 'Library/Application Support/VSCodium/User'
-    return pathlib.Path(os.environ.get('XDG_CONFIG_HOME', pathlib.Path.home()/'.config')) / 'VSCodium/User'
+def user_directory(vscode=False):
+    application = 'Code' if vscode else 'VSCodium'
+    if sys.platform == 'win32':
+        base = pathlib.Path(os.environ['APPDATA'])
+    elif sys.platform == 'darwin':
+        base = pathlib.Path.home() / 'Library/Application Support'
+    else:
+        base = pathlib.Path(os.environ.get('XDG_CONFIG_HOME') or pathlib.Path.home()/'.config')
+    return base / application / 'User'
 
 def snapshot(source, cli):
     CONFIG.mkdir(parents=True, exist_ok=True)
@@ -45,23 +51,25 @@ def snapshot(source, cli):
                          if re.fullmatch(r'[\w-]+\.[\w.-]+', line.strip()) and line.strip().lower() != 'jongukc.dalbit'})
     (CONFIG/'extensions.txt').write_text('\n'.join(extensions)+'\n', encoding='utf-8')
 
-def deploy(destination, cli, skip_extensions=False):
+def deploy(destination, cli, skip_extensions=False, *, vscode=False):
+    source = VSCODE_CONFIG if vscode else CONFIG
+    backup_name = 'vscode' if vscode else 'vscodium'
     destination.mkdir(parents=True, exist_ok=True)
     stamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S-%f')
     if sys.platform != 'win32' and not shutil.which('lazygit') and not skip_extensions:
         install_lazygit()
     for name in ('settings.json', 'keybindings.json'):
         target = destination/name
-        content = (CONFIG/name).read_bytes()
+        content = (source/name).read_bytes()
         if name == 'settings.json' and sys.platform != 'win32':
-            settings = load_jsonc(CONFIG/name)
+            settings = load_jsonc(source/name)
             for executable, key in (('clangd', 'clangd.path'), ('shfmt', 'shellformat.path'), ('lazygit', 'lazygit-vscode.lazygitPath')):
                 binary = shutil.which(executable)
                 if binary: settings[key] = binary
             content = (json.dumps(settings, indent=4, ensure_ascii=False)+'\n').encode('utf-8')
         if target.exists() and target.read_bytes() == content: continue
         if target.exists():
-            backup = pathlib.Path.home()/'.dotfiles-backup'/stamp/'vscodium'
+            backup = pathlib.Path.home()/'.dotfiles-backup'/stamp/backup_name
             backup.mkdir(parents=True, exist_ok=True)
             shutil.copy2(target, backup/name)
         target.write_bytes(content)
@@ -95,9 +103,17 @@ def install_lazygit():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', choices=('snapshot', 'install'))
-    parser.add_argument('--cli', default=shutil.which('codium') or shutil.which('codium.cmd') or 'codium')
-    parser.add_argument('--directory', type=pathlib.Path, default=user_directory())
+    parser.add_argument('--cli')
+    parser.add_argument('--directory', type=pathlib.Path)
+    parser.add_argument('--vscode', action='store_true', help='install into Visual Studio Code')
     parser.add_argument('--skip-extensions', action='store_true')
     args = parser.parse_args()
-    if args.action == 'snapshot': snapshot(args.directory, args.cli)
-    else: deploy(args.directory, args.cli, args.skip_extensions)
+    if args.action == 'snapshot' and args.vscode:
+        parser.error('--vscode is only supported for install')
+    command = 'code' if args.vscode else 'codium'
+    cli = args.cli or shutil.which(command) or shutil.which(command + '.cmd') or command
+    directory = args.directory or user_directory(args.vscode)
+    if args.action == 'snapshot':
+        snapshot(directory, cli)
+    else:
+        deploy(directory, cli, args.skip_extensions, vscode=args.vscode)

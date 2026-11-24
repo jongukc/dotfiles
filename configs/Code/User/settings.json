@@ -1,241 +1,1370 @@
 {
-    "workbench.colorTheme": "Gruvbox Material Dark",
-    "workbench.iconTheme": "file-icons",
-    "workbench.secondarySideBar.defaultVisibility": "hidden",
-    "extensions.ignoreRecommendations": true,
-    "editor.inlayHints.enabled": "on",
-    "latex-workshop.latex.tools": [
+    "security.workspace.trust.startupPrompt": "never",
+    "window.customMenuBarAltFocus": false,
+    "window.enableMenuBarMnemonics": false,
+    "window.menuBarVisibility": "compact",
+    "editor.lineNumbers": "relative",
+    "editor.fontSize": 18,
+    "editor.minimap.enabled": false,
+    "workbench.statusBar.experimental.fontSize": 16,
+    "vim.leader": "<space>",
+    "vim.handleKeys": {
+        "<C-a>": false,
+        "<C-b>": false,
+        "<C-f>": false,
+        "<C-j>": false,
+        "<C-k>": false,
+        "<C-h>": false,
+        "<C-l>": false,
+        "<C-p>": false,
+        "<C-t>": false
+    },
+    "vim.useSystemClipboard": true,
+    "vim.smartRelativeLine": false,
+    "vim.normalModeKeyBindingsNonRecursive": [
         {
-            "name": "latexmk",
-            "command": "latexmk",
-            "args": [
-                "-synctex=1",
-                "-interaction=nonstopmode",
-                "-file-line-error",
-                "-pdf",
-                "-outdir=%OUTDIR%",
-                "%DOC%"
+            "before": [
+                "<Space>"
             ],
-            "env": {}
+            "commands": [
+                "whichkey.show"
+            ]
         },
         {
-            "name": "lualatexmk",
-            "command": "latexmk",
-            "args": [
-                "-synctex=1",
-                "-interaction=nonstopmode",
-                "-file-line-error",
-                "-lualatex",
-                "-outdir=%OUTDIR%",
-                "%DOC%"
+            "before": [
+                "x"
             ],
-            "env": {}
+            "after": [
+                "\"",
+                "_",
+                "x"
+            ]
         },
         {
-            "name": "xelatexmk",
-            "command": "latexmk",
-            "args": [
-                "-synctex=1",
-                "-interaction=nonstopmode",
-                "-file-line-error",
-                "-xelatex",
-                "-outdir=%OUTDIR%",
-                "%DOC%"
+            "before": [
+                "<C-d>"
             ],
-            "env": {}
+            "after": [
+                "<C-d>",
+                "z",
+                "z"
+            ]
         },
         {
-            "name": "latexmk_rconly",
-            "command": "latexmk",
-            "args": [
-                "%DOC%"
+            "before": [
+                "<C-u>"
             ],
-            "env": {}
+            "after": [
+                "<C-u>",
+                "z",
+                "z"
+            ]
         },
         {
-            "name": "pdflatex",
-            "command": "pdflatex",
-            "args": [
-                "-synctex=1",
-                "-interaction=nonstopmode",
-                "-file-line-error",
-                "%DOC%"
+            "before": [
+                "n"
             ],
-            "env": {}
+            "after": [
+                "n",
+                "z",
+                "z",
+                "z",
+                "v"
+            ]
         },
         {
-            "name": "bibtex",
-            "command": "bibtex",
-            "args": [
-                "%DOCFILE%"
+            "before": [
+                "N"
             ],
-            "env": {}
+            "after": [
+                "N",
+                "z",
+                "z",
+                "z",
+                "v"
+            ]
         },
         {
-            "name": "rnw2tex",
-            "command": "Rscript",
-            "args": [
-                "-e",
-                "knitr::opts_knit$set(concordance = TRUE); knitr::knit('%DOCFILE_EXT%')"
+            "before": [
+                "<C-s>"
             ],
-            "env": {}
+            "commands": [
+                "workbench.action.files.save"
+            ]
         },
         {
-            "name": "jnw2tex",
-            "command": "julia",
-            "args": [
-                "-e",
-                "using Weave; weave(\"%DOC_EXT%\", doctype=\"tex\")"
+            "before": [
+                "<C-q>"
             ],
-            "env": {}
+            "commands": [
+                "workbench.action.closeActiveEditor"
+            ]
         },
         {
-            "name": "jnw2texminted",
-            "command": "julia",
-            "args": [
-                "-e",
-                "using Weave; weave(\"%DOC_EXT%\", doctype=\"texminted\")"
+            "before": [
+                "<Tab>"
             ],
-            "env": {}
+            "commands": [
+                "workbench.action.nextEditorInGroup"
+            ]
         },
         {
-            "name": "pnw2tex",
-            "command": "pweave",
-            "args": [
-                "-f",
-                "tex",
-                "%DOC_EXT%"
+            "before": [
+                "<S-Tab>"
             ],
-            "env": {}
+            "commands": [
+                "workbench.action.previousEditorInGroup"
+            ]
         },
         {
-            "name": "pnw2texminted",
-            "command": "pweave",
-            "args": [
-                "-f",
-                "texminted",
-                "%DOC_EXT%"
+            "before": [
+                "<Up>"
             ],
-            "env": {}
+            "commands": [
+                "workbench.action.decreaseViewHeight"
+            ]
         },
         {
-            "name": "tectonic",
-            "command": "tectonic",
-            "args": [
-                "--synctex",
-                "--keep-logs",
-                "--print",
-                "%DOC%.tex"
+            "before": [
+                "<Down>"
             ],
-            "env": {}
+            "commands": [
+                "workbench.action.increaseViewHeight"
+            ]
+        },
+        {
+            "before": [
+                "<Left>"
+            ],
+            "commands": [
+                "workbench.action.decreaseViewWidth"
+            ]
+        },
+        {
+            "before": [
+                "<Right>"
+            ],
+            "commands": [
+                "workbench.action.increaseViewWidth"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "s",
+                "n"
+            ],
+            "commands": [
+                "workbench.action.files.saveWithoutFormatting"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "g",
+                "s"
+            ],
+            "commands": [
+                "lazygit-vscode.toggle"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "x"
+            ],
+            "commands": [
+                "workbench.action.closeActiveEditor"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "b"
+            ],
+            "commands": [
+                "workbench.action.files.newUntitledFile"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "\\"
+            ],
+            "commands": [
+                "workbench.action.splitEditorRight"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "-"
+            ],
+            "commands": [
+                "workbench.action.splitEditorDown"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "s",
+                "e"
+            ],
+            "commands": [
+                "workbench.action.evenEditorWidths"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "x",
+                "s"
+            ],
+            "commands": [
+                "workbench.action.closeEditorsInGroup"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "t",
+                "o"
+            ],
+            "commands": [
+                "workbench.action.newGroupRight"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "t",
+                "x"
+            ],
+            "commands": [
+                "workbench.action.closeEditorsInGroup"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "t",
+                "n"
+            ],
+            "commands": [
+                "workbench.action.focusNextGroup"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "t",
+                "p"
+            ],
+            "commands": [
+                "workbench.action.focusPreviousGroup"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "t"
+            ],
+            "commands": [
+                "workbench.action.createTerminalEditorSameGroup"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "l",
+                "w"
+            ],
+            "commands": [
+                "editor.action.toggleWordWrap"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "d"
+            ],
+            "commands": [
+                "editor.action.showHover"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "q"
+            ],
+            "commands": [
+                "code-telescope.fuzzy.diagnostics"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "e"
+            ],
+            "commands": [
+                "oil-code.open"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "c",
+                "n"
+            ],
+            "commands": [
+                "editor.action.marker.nextInFiles"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "c",
+                "p"
+            ],
+            "commands": [
+                "editor.action.marker.prevInFiles"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "s",
+                "h"
+            ],
+            "commands": [
+                "workbench.action.openDocumentationUrl"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "s",
+                "k"
+            ],
+            "commands": [
+                "code-telescope.fuzzy.keybindings"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "s",
+                "f"
+            ],
+            "commands": [
+                "code-telescope.fuzzy.file"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "s",
+                "s"
+            ],
+            "commands": [
+                "code-telescope.fuzzy.builtin"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "s",
+                "w"
+            ],
+            "commands": [
+                {
+                    "command": "workbench.action.findInFiles",
+                    "args": {
+                        "isRegex": false,
+                        "isCaseSensitive": true,
+                        "matchWholeWord": false
+                    }
+                }
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "s",
+                "g"
+            ],
+            "commands": [
+                "code-telescope.fuzzy.wsText"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "s",
+                "d"
+            ],
+            "commands": [
+                "code-telescope.fuzzy.diagnostics"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "s",
+                "r"
+            ],
+            "commands": [
+                "code-telescope.fuzzy.resume"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "s",
+                "."
+            ],
+            "commands": [
+                "workbench.action.openRecent"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "/"
+            ],
+            "commands": [
+                "code-telescope.fuzzy.fileText"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "D"
+            ],
+            "commands": [
+                "editor.action.goToTypeDefinition"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "d",
+                "s"
+            ],
+            "commands": [
+                "code-telescope.fuzzy.documentSymbols"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "w",
+                "s"
+            ],
+            "commands": [
+                "code-telescope.fuzzy.wsSymbols"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "r",
+                "n"
+            ],
+            "commands": [
+                "editor.action.rename"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "c",
+                "a"
+            ],
+            "commands": [
+                "editor.action.quickFix"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "h",
+                "p"
+            ],
+            "commands": [
+                "editor.action.dirtydiff.next"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "h",
+                "b"
+            ],
+            "commands": [
+                "git.blame.toggleEditorDecoration"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "m"
+            ],
+            "commands": [
+                "markdown.showPreview"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "m",
+                "s"
+            ],
+            "commands": [
+                "markdown.showPreviewToSide"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "t",
+                "c"
+            ],
+            "commands": [
+                "editor.action.toggleStickyScroll"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "u"
+            ],
+            "commands": [
+                "workbench.action.localHistory.restoreViaPicker"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "n"
+            ],
+            "commands": [
+                "editor.action.addSelectionToNextFindMatch"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "p"
+            ],
+            "commands": [
+                "editor.action.addSelectionToPreviousFindMatch"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "t",
+                "h"
+            ],
+            "commands": [
+                {
+                    "command": "workbench.action.openSettings",
+                    "args": "editor.inlayHints.enabled"
+                }
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "<leader>"
+            ],
+            "commands": [
+                "code-telescope.fuzzy.recentFiles"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "s",
+                "/"
+            ],
+            "commands": [
+                {
+                    "command": "workbench.action.findInFiles",
+                    "args": {
+                        "onlyOpenEditors": true
+                    }
+                }
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "d"
+            ],
+            "commands": [
+                "editor.action.revealDefinition"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "r"
+            ],
+            "commands": [
+                "code-telescope.fuzzy.lspRefs"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "I"
+            ],
+            "commands": [
+                "editor.action.goToImplementation"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "D"
+            ],
+            "commands": [
+                "editor.action.revealDeclaration"
+            ]
+        },
+        {
+            "before": [
+                "[",
+                "d"
+            ],
+            "commands": [
+                "editor.action.marker.prevInFiles"
+            ]
+        },
+        {
+            "before": [
+                "]",
+                "d"
+            ],
+            "commands": [
+                "editor.action.marker.nextInFiles"
+            ]
+        },
+        {
+            "before": [
+                "[",
+                "c"
+            ],
+            "commands": [
+                "editor.action.focusStickyScroll"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "?"
+            ],
+            "commands": [
+                "whichkey.show"
+            ]
         }
     ],
-    "latex-workshop.latex.recipes": [
-
-        {
-            "name": "latexmk",
-            "tools": [
-                "latexmk"
-            ]
-        },
-        {
-            "name": "latexmk (latexmkrc)",
-            "tools": [
-                "latexmk_rconly"
-            ]
-        },
-        {
-            "name": "latexmk (lualatex)",
-            "tools": [
-                "lualatexmk"
-            ]
-        },
-        {
-            "name": "latexmk (xelatex)",
-            "tools": [
-                "xelatexmk"
-            ]
-        },
-        {
-            "name": "pdflatex -> bibtex -> pdflatex * 2",
-            "tools": [
-                "pdflatex",
-                "bibtex",
-                "pdflatex",
-                "pdflatex"
-            ]
-        },
-        {
-            "name": "Compile Rnw files",
-            "tools": [
-                "rnw2tex",
-                "latexmk"
-            ]
-        },
-        {
-            "name": "Compile Jnw files",
-            "tools": [
-                "jnw2tex",
-                "latexmk"
-            ]
-        },
-        {
-            "name": "Compile Pnw files",
-            "tools": [
-                "pnw2tex",
-                "latexmk"
-            ]
-        },
-        {
-            "name": "tectonic",
-            "tools": [
-                "tectonic"
-            ]
-        }
-    ],
-    "latex-workshop.latex.external.build.command": "make",
+    "git.blame.editorDecoration.enabled": true,
     "latex-workshop.latex.external.build.args": [
         "-C",
         "paper",
         "all"
     ],
+    "latex-workshop.latex.external.build.command": "make",
     "latex-workshop.latex.autoBuild.run": "onSave",
-    "git.confirmSync": false,
-    "files.trimTrailingWhitespace": true,
     "[latex]": {
         "editor.defaultFormatter": "James-Yu.latex-workshop",
-        "editor.defaultFoldingRangeProvider": "James-Yu.latex-workshop",
+        "editor.defaultFoldingRangeProvider": "James-Yu.latex-workshop"
     },
-    "editor.wordWrap": "off",
-    "editor.wordWrapColumn": 80,
+    "editor.cursorStyle": "block",
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "prettier.tabWidth": 4,
+    "editor.autoIndent": "full",
+    "editor.wrappingIndent": "indent",
+    "editor.wordWrap": "on",
+    "editor.scrollBeyondLastLine": false,
+    "editor.cursorSurroundingLines": 4,
+    "editor.cursorSurroundingLinesStyle": "default",
+    "editor.renderLineHighlight": "line",
+    "editor.renderWhitespace": "all",
     "editor.rulers": [
         80
     ],
-    "rewrap.autoWrap.enabled": true,
-    "rewrap.wrappingColumn": 0,
-    "github.copilot.nextEditSuggestions.enabled": true,
-    "explorer.confirmDragAndDrop": false,
-    "diffEditor.ignoreTrimWhitespace": false,
-    "chat.editing.confirmEditRequestRemoval": false,
-    "terminal.integrated.enableMultiLinePasteWarning": "never",
-    "editor.fontFamily": "'JetBrainsMono NL', 'monospace', monospace",
-    "editor.fontLigatures": true,
-    "vim.insertModeKeyBindings": [ {
-        "before":   [ "<C-d>" ],
-        "commands": [ "editor.action.addSelectionToNextFindMatch" ]
-    } ],
-    "vim.visualModeKeyBindings": [ {
-            "before":   [ "<C-d>" ],
-            "commands": [ "editor.action.addSelectionToNextFindMatch" ]
-    } ],
-    "vim.normallModeKeyBindings": [ {
-            "before":   [ "<C-d>" ],
-            "commands": [ "editor.action.addSelectionToNextFindMatch" ]
-    } ],
-    "vim.handleKeys": { "<C-d>": true },
-    "vim.useSystemClipboard": true,
-    "gruvboxMaterial.darkContrast": "hard",
-    "gruvboxMaterial.highContrast": true,
-    "remote.autoForwardPortsSource": "hybrid",
-    "gruvboxMaterial.darkPalette": "mix",
+    "editor.guides.indentation": true,
+    "editor.stickyScroll.enabled": true,
+    "editor.stickyScroll.maxLineCount": 3,
+    "editor.occurrencesHighlight": "singleFile",
+    "editor.colorDecorators": true,
+    "editor.autoClosingBrackets": "languageDefined",
+    "editor.autoClosingQuotes": "languageDefined",
+    "editor.formatOnSave": true,
+    "editor.acceptSuggestionOnEnter": "off",
+    "editor.suggestSelection": "first",
+    "editor.wordBasedSuggestions": "matchingDocuments",
+    "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?",
+    "files.encoding": "utf8",
+    "files.hotExit": "onExit",
+    "workbench.editor.enablePreview": false,
+    "workbench.editor.openSideBySideDirection": "right",
+    "search.useIgnoreFiles": false,
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/.git": true,
+        "**/.venv": true
+    },
+    "vim.timeout": 300,
+    "vim.ignorecase": true,
+    "vim.smartcase": true,
+    "vim.hlsearch": false,
+    "vim.incsearch": true,
+    "vim.autoindent": true,
+    "vim.whichwrap": "b,s,<,>,[,],h,l",
+    "vim.textwidth": 80,
+    "vim.cursorStylePerMode.normal": "block",
+    "vim.cursorStylePerMode.insert": "block",
+    "vim.cursorStylePerMode.replace": "block",
+    "vim.cursorStylePerMode.visual": "block",
+    "vim.visualModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "<Space>"
+            ],
+            "commands": [
+                {
+                    "command": "whichkey.show",
+                    "args": [
+                        {
+                            "key": "c",
+                            "name": "Code / Quickfix",
+                            "type": "bindings",
+                            "bindings": [
+                                {
+                                    "key": "a",
+                                    "name": "quickFix",
+                                    "type": "command",
+                                    "command": "editor.action.quickFix"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "n",
+                            "name": "addSelectionToNextFindMatch",
+                            "type": "command",
+                            "command": "editor.action.addSelectionToNextFindMatch"
+                        },
+                        {
+                            "key": "p",
+                            "name": "addSelectionToPreviousFindMatch",
+                            "type": "command",
+                            "command": "editor.action.addSelectionToPreviousFindMatch"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "before": [
+                "<"
+            ],
+            "after": [
+                "<",
+                "g",
+                "v"
+            ]
+        },
+        {
+            "before": [
+                ">"
+            ],
+            "after": [
+                ">",
+                "g",
+                "v"
+            ]
+        },
+        {
+            "before": [
+                "p"
+            ],
+            "after": [
+                "\"",
+                "_",
+                "d",
+                "P"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "c",
+                "a"
+            ],
+            "commands": [
+                "editor.action.quickFix"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "n"
+            ],
+            "commands": [
+                "editor.action.addSelectionToNextFindMatch"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "p"
+            ],
+            "commands": [
+                "editor.action.addSelectionToPreviousFindMatch"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "?"
+            ],
+            "commands": [
+                {
+                    "command": "whichkey.show",
+                    "args": [
+                        {
+                            "key": "c",
+                            "name": "Code / Quickfix",
+                            "type": "bindings",
+                            "bindings": [
+                                {
+                                    "key": "a",
+                                    "name": "quickFix",
+                                    "type": "command",
+                                    "command": "editor.action.quickFix"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "n",
+                            "name": "addSelectionToNextFindMatch",
+                            "type": "command",
+                            "command": "editor.action.addSelectionToNextFindMatch"
+                        },
+                        {
+                            "key": "p",
+                            "name": "addSelectionToPreviousFindMatch",
+                            "type": "command",
+                            "command": "editor.action.addSelectionToPreviousFindMatch"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "codeTelescope.keybindings": {
+        "moveDown": "ctrl+j",
+        "moveUp": "ctrl+k",
+        "confirm": "enter",
+        "close": "escape",
+        "scrollUp": "ctrl+u",
+        "scrollDown": "ctrl+d",
+        "scrollLeft": "ctrl+h",
+        "scrollRight": "ctrl+alt+l",
+        "promptDelete": "backspace"
+    },
+    "codeTelescope.matching.algorithm": "subsequence",
+    "codeTelescope.wsFileFinder.excludeHidden": false,
+    "codeTelescope.wsFileFinder.excludePatterns": [
+        "**/node_modules/**",
+        "**/.git/**",
+        "**/.venv/**"
+    ],
+    "codeTelescope.wsTextFinder.excludePatterns": [
+        "**/node_modules/**",
+        "**/.git/**",
+        "**/.venv/**"
+    ],
+    "codeTelescope.preview.showLineNumbers": true,
+    "codeTelescope.layout.mode": "classic",
+    "codeTelescope.layout.promptFontSize": 18,
+    "codeTelescope.layout.resultsFontSize": 18,
+    "codeTelescope.layout.previewFontSize": 18,
+    "oil-code.disableVimKeymaps": true,
+    "oil-code.columns": [
+        "permissions",
+        "size",
+        "mtime"
+    ],
+    "oil-code.enableWorkspaceEdit": true,
+    "oil-code.hasNerdFont": false,
+    "whichkey.delay": 0,
+    "whichkey.sortOrder": "alphabetically",
+    "lazygit-vscode.panels": {
+        "sidebar": "hideRestore",
+        "panel": "hideRestore",
+        "secondarySidebar": "hideRestore"
+    },
+    "clangd.arguments": [
+        "--background-index",
+        "--clang-tidy",
+        "--header-insertion=iwyu",
+        "--completion-style=detailed",
+        "--function-arg-placeholders",
+        "--fallback-style=llvm"
+    ],
+    "basedpyright.analysis.typeCheckingMode": "standard",
+    "basedpyright.analysis.autoSearchPaths": true,
+    "basedpyright.analysis.useLibraryCodeForTypes": true,
+    "basedpyright.analysis.diagnosticMode": "openFilesOnly",
+    "Lua.runtime.version": "LuaJIT",
+    "Lua.diagnostics.globals": [
+        "vim"
+    ],
+    "Lua.diagnostics.disable": [
+        "missing-fields"
+    ],
+    "Lua.workspace.checkThirdParty": false,
+    "Lua.completion.callSnippet": "Replace",
+    "Lua.format.enable": false,
+    "shellformat.flag": "-i 4",
+    "shellformat.effectLanguages": [
+        "shellscript"
+    ],
+    "todo-tree.highlights.enabled": true,
+    "todo-tree.highlights.defaultHighlight": {
+        "gutterIcon": false
+    },
+    "todo-tree.general.tags": [
+        "TODO",
+        "FIX",
+        "FIXME",
+        "BUG",
+        "HACK",
+        "WARN",
+        "WARNING",
+        "PERF",
+        "NOTE",
+        "TEST"
+    ],
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports.ruff": "explicit"
+        }
+    },
+    "[lua]": {
+        "editor.defaultFormatter": "JohnnyMorganz.stylua"
+    },
+    "[shellscript]": {
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "[c]": {
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    },
+    "[cpp]": {
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[yaml]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[terraform]": {
+        "editor.defaultFormatter": "hashicorp.terraform"
+    },
+    "[terraform-vars]": {
+        "editor.defaultFormatter": "hashicorp.terraform"
+    },
+    "ruff.configuration": {
+        "lint": {
+            "extend-select": [
+                "I"
+            ]
+        }
+    },
+    "[oil]": {
+        "editor.formatOnSave": false,
+        "editor.wordWrap": "off",
+        "files.trimTrailingWhitespace": false
+    },
+    "whichkey.bindings": [
+        {
+            "key": "s",
+            "name": "Search",
+            "type": "bindings",
+            "bindings": [
+                {
+                    "key": "n",
+                    "name": "saveWithoutFormatting",
+                    "type": "command",
+                    "command": "workbench.action.files.saveWithoutFormatting"
+                },
+                {
+                    "key": "e",
+                    "name": "evenEditorWidths",
+                    "type": "command",
+                    "command": "workbench.action.evenEditorWidths"
+                },
+                {
+                    "key": "h",
+                    "name": "openDocumentationUrl",
+                    "type": "command",
+                    "command": "workbench.action.openDocumentationUrl"
+                },
+                {
+                    "key": "k",
+                    "name": "Code Telescope: Keyboard Shortcuts",
+                    "type": "command",
+                    "command": "code-telescope.fuzzy.keybindings"
+                },
+                {
+                    "key": "f",
+                    "name": "Code Telescope: Smart File Search",
+                    "type": "command",
+                    "command": "code-telescope.fuzzy.file"
+                },
+                {
+                    "key": "s",
+                    "name": "Code Telescope: Builtin Finders",
+                    "type": "command",
+                    "command": "code-telescope.fuzzy.builtin"
+                },
+                {
+                    "key": "w",
+                    "name": "findInFiles",
+                    "type": "command",
+                    "command": "workbench.action.findInFiles",
+                    "args": {
+                        "isRegex": false,
+                        "isCaseSensitive": true,
+                        "matchWholeWord": false
+                    }
+                },
+                {
+                    "key": "g",
+                    "name": "Code Telescope: Workspace Text Search",
+                    "type": "command",
+                    "command": "code-telescope.fuzzy.wsText"
+                },
+                {
+                    "key": "d",
+                    "name": "Code Telescope: Workspace Diagnostics",
+                    "type": "command",
+                    "command": "code-telescope.fuzzy.diagnostics"
+                },
+                {
+                    "key": "r",
+                    "name": "Code Telescope: Resume Last Finder",
+                    "type": "command",
+                    "command": "code-telescope.fuzzy.resume"
+                },
+                {
+                    "key": ".",
+                    "name": "openRecent",
+                    "type": "command",
+                    "command": "workbench.action.openRecent"
+                },
+                {
+                    "key": "/",
+                    "name": "findInFiles",
+                    "type": "command",
+                    "command": "workbench.action.findInFiles",
+                    "args": {
+                        "onlyOpenEditors": true
+                    }
+                }
+            ]
+        },
+        {
+            "key": "g",
+            "name": "Git",
+            "type": "bindings",
+            "bindings": [
+                {
+                    "key": "s",
+                    "name": "LazyGit: Toggle",
+                    "type": "command",
+                    "command": "lazygit-vscode.toggle"
+                }
+            ]
+        },
+        {
+            "key": "x",
+            "name": "Close",
+            "type": "bindings",
+            "bindings": [
+                {
+                    "key": "<enter>",
+                    "name": "closeActiveEditor",
+                    "type": "command",
+                    "command": "workbench.action.closeActiveEditor"
+                },
+                {
+                    "key": "s",
+                    "name": "closeEditorsInGroup",
+                    "type": "command",
+                    "command": "workbench.action.closeEditorsInGroup"
+                }
+            ]
+        },
+        {
+            "key": "b",
+            "name": "newUntitledFile",
+            "type": "command",
+            "command": "workbench.action.files.newUntitledFile"
+        },
+        {
+            "key": "\\",
+            "name": "splitEditorRight",
+            "type": "command",
+            "command": "workbench.action.splitEditorRight"
+        },
+        {
+            "key": "-",
+            "name": "splitEditorDown",
+            "type": "command",
+            "command": "workbench.action.splitEditorDown"
+        },
+        {
+            "key": "t",
+            "name": "Terminal / Editor groups",
+            "type": "bindings",
+            "bindings": [
+                {
+                    "key": "<enter>",
+                    "name": "Open terminal in current editor group",
+                    "type": "command",
+                    "command": "workbench.action.createTerminalEditorSameGroup"
+                },
+                {
+                    "key": "o",
+                    "name": "newGroupRight",
+                    "type": "command",
+                    "command": "workbench.action.newGroupRight"
+                },
+                {
+                    "key": "x",
+                    "name": "closeEditorsInGroup",
+                    "type": "command",
+                    "command": "workbench.action.closeEditorsInGroup"
+                },
+                {
+                    "key": "n",
+                    "name": "focusNextGroup",
+                    "type": "command",
+                    "command": "workbench.action.focusNextGroup"
+                },
+                {
+                    "key": "p",
+                    "name": "focusPreviousGroup",
+                    "type": "command",
+                    "command": "workbench.action.focusPreviousGroup"
+                },
+                {
+                    "key": "c",
+                    "name": "toggleStickyScroll",
+                    "type": "command",
+                    "command": "editor.action.toggleStickyScroll"
+                },
+                {
+                    "key": "h",
+                    "name": "openSettings",
+                    "type": "command",
+                    "command": "workbench.action.openSettings",
+                    "args": "editor.inlayHints.enabled"
+                }
+            ]
+        },
+        {
+            "key": "l",
+            "name": "Line",
+            "type": "bindings",
+            "bindings": [
+                {
+                    "key": "w",
+                    "name": "toggleWordWrap",
+                    "type": "command",
+                    "command": "editor.action.toggleWordWrap"
+                }
+            ]
+        },
+        {
+            "key": "d",
+            "name": "Diagnostics / Symbols",
+            "type": "bindings",
+            "bindings": [
+                {
+                    "key": "<enter>",
+                    "name": "showHover",
+                    "type": "command",
+                    "command": "editor.action.showHover"
+                },
+                {
+                    "key": "s",
+                    "name": "Code Telescope: Document Symbols",
+                    "type": "command",
+                    "command": "code-telescope.fuzzy.documentSymbols"
+                }
+            ]
+        },
+        {
+            "key": "q",
+            "name": "Code Telescope: Workspace Diagnostics",
+            "type": "command",
+            "command": "code-telescope.fuzzy.diagnostics"
+        },
+        {
+            "key": "e",
+            "name": "Oil: Open - Open Oil in active files directory",
+            "type": "command",
+            "command": "oil-code.open"
+        },
+        {
+            "key": "c",
+            "name": "Code / Quickfix",
+            "type": "bindings",
+            "bindings": [
+                {
+                    "key": "n",
+                    "name": "nextInFiles",
+                    "type": "command",
+                    "command": "editor.action.marker.nextInFiles"
+                },
+                {
+                    "key": "p",
+                    "name": "prevInFiles",
+                    "type": "command",
+                    "command": "editor.action.marker.prevInFiles"
+                },
+                {
+                    "key": "a",
+                    "name": "quickFix",
+                    "type": "command",
+                    "command": "editor.action.quickFix"
+                }
+            ]
+        },
+        {
+            "key": "/",
+            "name": "Code Telescope: Current File Text Search",
+            "type": "command",
+            "command": "code-telescope.fuzzy.fileText"
+        },
+        {
+            "key": "D",
+            "name": "goToTypeDefinition",
+            "type": "command",
+            "command": "editor.action.goToTypeDefinition"
+        },
+        {
+            "key": "w",
+            "name": "Workspace",
+            "type": "bindings",
+            "bindings": [
+                {
+                    "key": "s",
+                    "name": "Code Telescope: Workspace Symbol Search",
+                    "type": "command",
+                    "command": "code-telescope.fuzzy.wsSymbols"
+                }
+            ]
+        },
+        {
+            "key": "r",
+            "name": "Rename",
+            "type": "bindings",
+            "bindings": [
+                {
+                    "key": "n",
+                    "name": "rename",
+                    "type": "command",
+                    "command": "editor.action.rename"
+                }
+            ]
+        },
+        {
+            "key": "h",
+            "name": "Git hunk",
+            "type": "bindings",
+            "bindings": [
+                {
+                    "key": "p",
+                    "name": "next",
+                    "type": "command",
+                    "command": "editor.action.dirtydiff.next"
+                },
+                {
+                    "key": "b",
+                    "name": "toggleEditorDecoration",
+                    "type": "command",
+                    "command": "git.blame.toggleEditorDecoration"
+                }
+            ]
+        },
+        {
+            "key": "m",
+            "name": "Markdown preview",
+            "type": "bindings",
+            "bindings": [
+                {
+                    "key": "<enter>",
+                    "name": "showPreview",
+                    "type": "command",
+                    "command": "markdown.showPreview"
+                },
+                {
+                    "key": "s",
+                    "name": "showPreviewToSide",
+                    "type": "command",
+                    "command": "markdown.showPreviewToSide"
+                }
+            ]
+        },
+        {
+            "key": "u",
+            "name": "restoreViaPicker",
+            "type": "command",
+            "command": "workbench.action.localHistory.restoreViaPicker"
+        },
+        {
+            "key": "n",
+            "name": "addSelectionToNextFindMatch",
+            "type": "command",
+            "command": "editor.action.addSelectionToNextFindMatch"
+        },
+        {
+            "key": "p",
+            "name": "addSelectionToPreviousFindMatch",
+            "type": "command",
+            "command": "editor.action.addSelectionToPreviousFindMatch"
+        },
+        {
+            "key": " ",
+            "name": "Code Telescope: Active Tabs",
+            "type": "command",
+            "command": "code-telescope.fuzzy.recentFiles"
+        }
+    ],
+    "workbench.startupEditor": "none",
+    "terminal.integrated.defaultLocation": "editor",
+    "workbench.iconTheme": "file-icons",
+    "workbench.colorTheme": "Dalbit"
 }

@@ -225,10 +225,12 @@ if [ "$OS" = "Darwin" ]; then
     function vscode_setup {
         echo "[*] vscode_setup"
         brew_install_cask visual-studio-code
+        command -v python3 >/dev/null 2>&1 || brew_install python
 
-        local code_user="$HOME/Library/Application Support/Code/User"
-        mkdir -p "$code_user"
-        [ -d "$CONFIGS/Code/User" ] && cp "$CONFIGS/Code/User/"* "$code_user/"
+        local code_cli
+        code_cli="$(command -v code || true)"
+        [ -n "$code_cli" ] || code_cli="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
+        PATH="$HOME/.local/bin:$PATH" python3 "$ROOT/scripts/vscodium.py" install --vscode --cli "$code_cli"
     }
 
     function lua_setup {
@@ -400,7 +402,8 @@ function pkg {
             base-devel)              echo "build-essential" ;;
             lua51)                   echo "lua5.1 liblua5.1-dev" ;;
             docker)                  echo "docker.io" ;;
-            visual-studio-code-bin)  echo "code" ;;
+            python)                  echo "python3" ;;
+            visual-studio-code-bin)   echo "code" ;;
             google-chrome)           echo "google-chrome-stable" ;;
             ttf-jetbrains-mono-nerd) echo "fonts-jetbrains-mono" ;;
             noto-fonts-cjk)          echo "fonts-noto-cjk" ;;
@@ -765,10 +768,10 @@ function _docker_setup {
 function vscode_setup {
     echo "[*] vscode_setup"
 
-    install $(pkg visual-studio-code-bin)
+    command -v code >/dev/null 2>&1 || install $(pkg visual-studio-code-bin)
+    command -v python3 >/dev/null 2>&1 || install "$(pkg python)"
 
-    mkdir -p "$HOME/.config/Code"
-    [ -d "$CONFIGS/Code/User" ] && cp -r "$CONFIGS/Code/User" "$HOME/.config/Code"
+    PATH="$HOME/.local/bin:$PATH" python3 "$ROOT/scripts/vscodium.py" install --vscode
 }
 
 function xclip_setup {

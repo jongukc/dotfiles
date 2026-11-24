@@ -24,6 +24,7 @@ and systemd user services.
 ./setup.sh -t zsh
 ./setup.sh -t tmux
 ./setup.sh -t nvim
+./setup.sh -t vscode
 ./setup.sh -t vscodium
 ```
 
@@ -76,7 +77,13 @@ Windows Terminal gains a **Dotfiles PowerShell** profile with the Dalbit palette
 Select it from its profile menu. Existing Terminal profiles/defaults are retained.
 VSCodium's integrated terminal uses the managed PowerShell 7 profile automatically.
 
-### VSCodium
+### VS Code and VSCodium
+
+On Linux and macOS, `./setup.sh -t vscode` installs the migrated settings and
+keybindings from `configs/Code/User/` and uses the extensions listed below.
+The VS Code settings suppress the Workspace Trust dialog when opening a folder.
+To deploy just the two configuration files, run
+`python3 scripts/vscodium.py install --vscode --skip-extensions`.
 
 `configs/vscodium/` contains this machine's settings, keymaps and extension list,
 including the Neovim-style leader bindings, Code Telescope, Oil, Which Key,
