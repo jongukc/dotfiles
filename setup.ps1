@@ -31,7 +31,8 @@ if ($DryRun) {
 New-Item -ItemType Directory -Path $toolBin -Force | Out-Null
 $script:toolState = @{}
 if (Test-Path -LiteralPath $statePath) {
-    $saved = Get-Content -LiteralPath $statePath -Raw | ConvertFrom-Json
+    # Save-ToolState writes UTF-8 without a BOM; PS 5.1 otherwise uses ANSI.
+    $saved = Get-Content -LiteralPath $statePath -Raw -Encoding UTF8 | ConvertFrom-Json
     foreach ($property in $saved.PSObject.Properties) { $script:toolState[$property.Name] = $property.Value }
 }
 
@@ -184,7 +185,9 @@ function Get-Codium {
         if (Test-Path -LiteralPath $candidate) { return $candidate }
     }
     if ($SkipPackages) { throw 'VSCodium is missing. Rerun without -SkipPackages.' }
-    & winget install --id VSCodium.VSCodium --exact --scope user --source winget --silent --accept-package-agreements --accept-source-agreements
+    # Keep winget's native output out of the function pipeline: callers capture
+    # Get-Codium's output as the executable path.
+    & winget install --id VSCodium.VSCodium --exact --scope user --source winget --silent --accept-package-agreements --accept-source-agreements | Out-Host
     if ($LASTEXITCODE -ne 0) { throw 'VSCodium installation failed.' }
     $candidate = Join-Path $env:LOCALAPPDATA 'Programs/VSCodium/bin/codium.cmd'
     if (-not (Test-Path -LiteralPath $candidate)) { throw 'Cannot locate the installed codium.cmd.' }
