@@ -26,6 +26,9 @@ and systemd user services.
 ./setup.sh -t nvim
 ./setup.sh -t vscode
 ./setup.sh -t vscodium
+
+# Install multiple components in the order listed
+./setup.sh -t nvim,tmux,zsh
 ```
 
 On Apple Silicon, `./setup.sh -t brew` installs and selects native Homebrew at
@@ -47,6 +50,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
 .\setup.ps1 -Target psmux
 .\setup.ps1 -Target vscodium
 .\setup.ps1 -Target terminal
+
+# Install/configure multiple components in the order listed
+.\setup.ps1 -Target powershell,psmux,terminal
 
 # Show the plan; or deploy using already-installed packages/extensions
 .\setup.ps1 -DryRun

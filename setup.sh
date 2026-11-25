@@ -10,6 +10,45 @@ OS="$(uname -s)"
 # Native Windows entry point: ./setup.ps1 (PowerShell), not this Unix installer.
 source "$ROOT/scripts/vscodium.sh"
 
+function setup_targets {
+    local target_list="all" opt OPTIND=1 OPTARG
+    while getopts ":t:" opt; do
+        case $opt in
+            t) target_list=$OPTARG ;;
+            :) echo "Error: -$OPTARG requires a target list" >&2; exit 1 ;;
+            \?) echo "Invalid option: -$OPTARG" >&2; exit 1 ;;
+        esac
+    done
+
+    # Resolve the entire list before running any setup function.
+    local remaining="$target_list," target action
+    local -a actions=()
+    while [ -n "$remaining" ]; do
+        target=${remaining%%,*}
+        remaining=${remaining#*,}
+        if [[ ! $target =~ ^[[:space:]]*([a-zA-Z0-9_]+)[[:space:]]*$ ]]; then
+            echo "Error: Invalid setup target: '$target'" >&2
+            exit 1
+        fi
+        target=${BASH_REMATCH[1]}
+
+        if [ "$target" = "all" ]; then
+            actions+=(setup)
+        elif declare -F "${target}_setup" >/dev/null; then
+            actions+=("${target}_setup")
+        elif [ "$target" != "setup_targets" ] && declare -F "$target" >/dev/null; then
+            actions+=("$target")
+        else
+            echo "Error: Unknown setup target: '$target'" >&2
+            exit 1
+        fi
+    done
+
+    for action in "${actions[@]}"; do
+        "$action"
+    done
+}
+
 if [ "$OS" = "Darwin" ]; then
     HOMEBREW_PREFIX="/usr/local"
     if [ "$(uname -m)" = "arm64" ]; then
@@ -343,32 +382,7 @@ if [ "$OS" = "Darwin" ]; then
         mdview_setup
     }
 
-    TARGET="all"
-    while getopts "t:" opt; do
-        case $opt in
-        t)
-            TARGET=$OPTARG
-            ;;
-        \?)
-            echo "Invalid option: -$OPTARG" >&2
-            exit 1
-            ;;
-        esac
-    done
-
-    if [ "$TARGET" == "all" ]; then
-        setup
-    else
-        if declare -f "${TARGET}_setup" >/dev/null; then
-            "${TARGET}_setup"
-        elif declare -f "${TARGET}" >/dev/null; then
-            "${TARGET}"
-        else
-            echo "Error: Function ${TARGET}_setup or ${TARGET} not found"
-            exit 1
-        fi
-    fi
-
+    setup_targets "$@"
     exit 0
 fi
 
@@ -944,28 +958,4 @@ function setup {
     # rclone_setup
 }
 
-TARGET="all"
-while getopts "t:" opt; do
-    case $opt in
-    t)
-        TARGET=$OPTARG
-        ;;
-    \?)
-        echo "Invalid option: -$OPTARG" >&2
-        exit 1
-        ;;
-    esac
-done
-
-if [ "$TARGET" == "all" ]; then
-    setup
-else
-    if declare -f "${TARGET}_setup" >/dev/null; then
-        "${TARGET}_setup"
-    elif declare -f "${TARGET}" >/dev/null; then
-        "${TARGET}"
-    else
-        echo "Error: Function ${TARGET}_setup or ${TARGET} not found"
-        exit 1
-    fi
-fi
+setup_targets "$@"

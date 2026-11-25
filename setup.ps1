@@ -1,8 +1,8 @@
 #requires -Version 5.1
 [CmdletBinding()]
 param(
-    [ValidateSet('all', 'tools', 'powershell', 'psmux', 'vscodium', 'terminal')]
-    [string]$Target = 'all',
+    [ValidateNotNullOrEmpty()]
+    [string[]]$Target = @('all'),
     [switch]$SkipPackages,
     [switch]$SkipExtensions,
     [switch]$UpdateTools,
@@ -10,6 +10,15 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
+$targets = @($Target -split ',' | ForEach-Object { $_.Trim() })
+$validTargets = @('all', 'tools', 'powershell', 'psmux', 'vscodium', 'terminal')
+foreach ($name in $targets) {
+    if ($name -notin $validTargets) {
+        throw "Invalid setup target '$name'. Valid targets: $($validTargets -join ', ')."
+    }
+}
+$targetList = $targets -join ','
+
 $repoRoot = $PSScriptRoot
 $configRoot = Join-Path $repoRoot 'configs'
 $toolsRoot = Join-Path $env:LOCALAPPDATA 'dotfiles'
@@ -20,7 +29,7 @@ $utf8 = New-Object System.Text.UTF8Encoding($false)
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 if ($DryRun) {
-    Write-Output "Target: $Target; portable tools: $toolsRoot"
+    Write-Output "Target: $targetList; portable tools: $toolsRoot"
     Write-Output 'powershell: PowerShell 7, Starship, zoxide, fzf; managed profile loader (existing profile retained)'
     Write-Output 'psmux: native psmux/pmux/tmux, ~/.psmux.conf; existing sessions left running'
     Write-Output 'vscodium: current portable config, extension manifest, bundled Dalbit theme; backup changed files'
@@ -115,7 +124,7 @@ $goArch = if ($arm) { 'arm64' } else { 'amd64' }
 $pwshPath = Install-ReleaseTool pwsh PowerShell/PowerShell "PowerShell-*-win-$winArch.zip" pwsh.exe
 Set-UserPath @($toolBin, (Split-Path -Parent $pwshPath))
 if ($PSVersionTable.PSVersion.Major -lt 7) {
-    $forward = @('-NoLogo', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $PSCommandPath, '-Target', $Target)
+    $forward = @('-NoLogo', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $PSCommandPath, '-Target', $targetList)
     if ($SkipPackages) { $forward += '-SkipPackages' }
     if ($SkipExtensions) { $forward += '-SkipExtensions' }
     if ($UpdateTools) { $forward += '-UpdateTools' }
@@ -235,7 +244,7 @@ function Install-TerminalConfig {
     Write-ManagedFile $destination ((ConvertTo-ConfigJson $palette) + "`n")
 }
 
-switch ($Target) {
+switch ($targets) {
     'all' { Install-PowerShellConfig; Install-PsmuxConfig; Install-VSCodiumConfig; Install-TerminalConfig }
     'tools' { Install-PowerShellConfig; Install-PsmuxConfig }
     'powershell' { Install-PowerShellConfig }
@@ -243,5 +252,5 @@ switch ($Target) {
     'vscodium' { Install-VSCodiumConfig }
     'terminal' { Install-TerminalConfig }
 }
-Write-Host "[+] $Target configured. Changed files backed up under $backupRoot (if any)."
+Write-Host "[+] $targetList configured. Changed files backed up under $backupRoot (if any)."
 Write-Host 'Open a new PowerShell session to load the prompt and updated PATH.'
