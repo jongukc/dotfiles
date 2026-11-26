@@ -1,0 +1,122 @@
+{
+  "plugins": {
+    "Korean-IME.nvim": {
+      "rev": "8d7c935d97fd5ffe6ecd9b6ff5a4105d1c806d95",
+      "src": "https://github.com/kiyoon/Korean-IME.nvim"
+    },
+    "dalbit.nvim": {
+      "rev": "3f23ef5cc4e17a71d72d63ba85f79b3049e0389f",
+      "src": "https://github.com/jongukc/dalbit.nvim"
+    },
+    "gitsigns.nvim": {
+      "rev": "c0862d382a35b7b45757d8d151a6a634c09bf3ce",
+      "src": "https://github.com/lewis6991/gitsigns.nvim"
+    },
+    "indent-blankline.nvim": {
+      "rev": "f1e186e44d3b7f9ae918008e2c28ce37c6023d2d",
+      "src": "https://github.com/lukas-reineke/indent-blankline.nvim"
+    },
+    "lualine.nvim": {
+      "rev": "221ce6b2d999187044529f49da6554a92f740a96",
+      "src": "https://github.com/nvim-lualine/lualine.nvim"
+    },
+    "markview.nvim": {
+      "rev": "a6dbc5a4a4828b474c81fbcec11546cbd9000e3b",
+      "src": "https://github.com/OXY2DEV/markview.nvim"
+    },
+    "mason.nvim": {
+      "rev": "2a6940af80375532e5e9e7c1f2fc6319a1b7a69d",
+      "src": "https://github.com/mason-org/mason.nvim"
+    },
+    "multicursor.nvim": {
+      "rev": "c574bfc1f7e63dfea3e64b8453c9f7c660127238",
+      "src": "https://github.com/jake-stewart/multicursor.nvim",
+      "version": "'1.0'"
+    },
+    "none-ls-extras.nvim": {
+      "rev": "9a8b8a9aeb43382e5aaf49b00b7cfb5d42d32118",
+      "src": "https://github.com/nvimtools/none-ls-extras.nvim"
+    },
+    "none-ls.nvim": {
+      "rev": "0b281893e36fe147077b49f022bf9cd78af3ad12",
+      "src": "https://github.com/nvimtools/none-ls.nvim"
+    },
+    "nvim-autopairs": {
+      "rev": "3172f40c16563db871a58f20d205c710ad782311",
+      "src": "https://github.com/windwp/nvim-autopairs"
+    },
+    "nvim-colorizer.lua": {
+      "rev": "72a05f62c52241bc7441c820eb53946f92b2e6a4",
+      "src": "https://github.com/catgoose/nvim-colorizer.lua"
+    },
+    "nvim-treesitter": {
+      "rev": "37e52c733ada9d8d544d53a763140ef1ba404353",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter",
+      "version": "'main'"
+    },
+    "nvim-treesitter-context": {
+      "rev": "8decd73460d26ef0a0befb745d022dd1fc2c38b8",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter-context"
+    },
+    "nvim-web-devicons": {
+      "rev": "0dc0cfb0c6858041174a53c7aa4adaf65e994b3c",
+      "src": "https://github.com/nvim-tree/nvim-web-devicons"
+    },
+    "oil.nvim": {
+      "rev": "d3733d933833a0e59b813ecec99341527adf0c28",
+      "src": "https://github.com/stevearc/oil.nvim"
+    },
+    "plenary.nvim": {
+      "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
+      "src": "https://github.com/nvim-lua/plenary.nvim"
+    },
+    "telescope-fzf-native.nvim": {
+      "rev": "b25b749b9db64d375d782094e2b9dce53ad53a40",
+      "src": "https://github.com/nvim-telescope/telescope-fzf-native.nvim"
+    },
+    "telescope-ui-select.nvim": {
+      "rev": "6e51d7da30bd139a6950adf2a47fda6df9fa06d2",
+      "src": "https://github.com/nvim-telescope/telescope-ui-select.nvim"
+    },
+    "telescope.nvim": {
+      "rev": "1e1bab730218eaf97fce743be3f56e51075928ac",
+      "src": "https://github.com/nvim-telescope/telescope.nvim"
+    },
+    "todo-comments.nvim": {
+      "rev": "31e3c38ce9b29781e4422fc0322eb0a21f4e8668",
+      "src": "https://github.com/folke/todo-comments.nvim"
+    },
+    "tree-sitter-palmer": {
+      "rev": "e157b113efd1b5747ed0b5f8866d8fec22603f77",
+      "src": "git@github.com:jongukc/tree-sitter-palmer.git"
+    },
+    "tree-sitter-pasm": {
+      "rev": "a1ee94ed4cf8b890c467a76e12fbc4d3ca6daf1d",
+      "src": "git@github.com:jongukc/tree-sitter-pasm.git"
+    },
+    "vim-fugitive": {
+      "rev": "3b753cf8c6a4dcde6edee8827d464ba9b8c4a6f0",
+      "src": "https://github.com/tpope/vim-fugitive"
+    },
+    "vim-rhubarb": {
+      "rev": "5496d7c94581c4c9ad7430357449bb57fc59f501",
+      "src": "https://github.com/tpope/vim-rhubarb"
+    },
+    "vim-sleuth": {
+      "rev": "be69bff86754b1aa5adcbb527d7fcd1635a84080",
+      "src": "https://github.com/tpope/vim-sleuth"
+    },
+    "vim-tmux-navigator": {
+      "rev": "fb217852efb294a50a10507fc8d53709696b6e23",
+      "src": "https://github.com/christoomey/vim-tmux-navigator"
+    },
+    "vimtex": {
+      "rev": "90cd6619728df9f6161e5691ac247f0fe3437462",
+      "src": "https://github.com/lervag/vimtex"
+    },
+    "which-key.nvim": {
+      "rev": "3aab2147e74890957785941f0c1ad87d0a44c15a",
+      "src": "https://github.com/folke/which-key.nvim"
+    }
+  }
+}
